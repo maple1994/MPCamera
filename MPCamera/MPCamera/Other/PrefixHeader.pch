@@ -1,0 +1,14 @@
+//
+//  PrefixHeader.pch
+//  MPCamera
+//
+//  Created by Maple on 2019/10/11.
+//  Copyright © 2019 Beauty-ruanjian. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+#import <Masonry.h>
+
+#endif /* PrefixHeader_pch */
