@@ -7,8 +7,12 @@
 //
 
 #import "MPCameraViewController.h"
+#import <GPUImage.h>
+#import "MPCameraManager.h"
 
 @interface MPCameraViewController ()
+
+@property (nonatomic, strong) GPUImageView *cameraView;
 
 @end
 
@@ -16,19 +20,30 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [self setupUI];
+    [[MPCameraManager shareManager] addOutputView:self.cameraView];
+    [[MPCameraManager shareManager] startCapturing];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
+}
+
+- (void)setupUI
+{
     self.navigationController.navigationBar.hidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
-    
+    [self setupCamera];
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)setupCamera
+{
+    self.cameraView = [[GPUImageView alloc] init];
+    [self.view addSubview:self.cameraView];
+    [self.cameraView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.view);
+    }];
 }
-*/
 
 @end
