@@ -21,6 +21,12 @@
 		A2536A4F2350865E0059E814 /* samperTeture2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A2536A4A2350865E0059E814 /* samperTeture2.jpg */; };
 		A2536A502350865E0059E814 /* samperTeture.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A2536A4B2350865E0059E814 /* samperTeture.jpg */; };
 		A2536A53235088AF0059E814 /* MPCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A2536A52235088AF0059E814 /* MPCameraViewController.m */; };
+		A26BCDDA23517D6600395683 /* MPCameraManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A26BCDD923517D6600395683 /* MPCameraManager.m */; };
+		A26BCDE7235181B600395683 /* UIDevice+Extention.m in Sources */ = {isa = PBXBuildFile; fileRef = A26BCDDF235181B500395683 /* UIDevice+Extention.m */; };
+		A26BCDE8235181B600395683 /* GPUImageMovieWriter+BugFix.m in Sources */ = {isa = PBXBuildFile; fileRef = A26BCDE0235181B500395683 /* GPUImageMovieWriter+BugFix.m */; };
+		A26BCDE9235181B600395683 /* UIButton+Extention.m in Sources */ = {isa = PBXBuildFile; fileRef = A26BCDE3235181B600395683 /* UIButton+Extention.m */; };
+		A26BCDEA235181B600395683 /* UIView+Extention.m in Sources */ = {isa = PBXBuildFile; fileRef = A26BCDE6235181B600395683 /* UIView+Extention.m */; };
+		A26BCDED2351829F00395683 /* CCGPUImageMovieWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = A26BCDEC2351829F00395683 /* CCGPUImageMovieWriter.m */; };
 		FE3C203913EED8050F6E48FA /* libPods-MPCameraUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BF2B660C99F9EEBD087350F /* libPods-MPCameraUITests.a */; };
 /* End PBXBuildFile section */
 
@@ -70,6 +76,21 @@
 		A2536A51235088AF0059E814 /* MPCameraViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPCameraViewController.h; sourceTree = "<group>"; };
 		A2536A52235088AF0059E814 /* MPCameraViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPCameraViewController.m; sourceTree = "<group>"; };
 		A2536A542350892A0059E814 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		A26BCDD823517D6600395683 /* MPCameraManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPCameraManager.h; sourceTree = "<group>"; };
+		A26BCDD923517D6600395683 /* MPCameraManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPCameraManager.m; sourceTree = "<group>"; };
+		A26BCDDC23517EF400395683 /* metamacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = metamacros.h; sourceTree = "<group>"; };
+		A26BCDDD23517EF400395683 /* Common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
+		A26BCDDE23517EF400395683 /* EXTScope.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EXTScope.h; sourceTree = "<group>"; };
+		A26BCDDF235181B500395683 /* UIDevice+Extention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIDevice+Extention.m"; sourceTree = "<group>"; };
+		A26BCDE0235181B500395683 /* GPUImageMovieWriter+BugFix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "GPUImageMovieWriter+BugFix.m"; sourceTree = "<group>"; };
+		A26BCDE1235181B600395683 /* UIView+Extention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+Extention.h"; sourceTree = "<group>"; };
+		A26BCDE2235181B600395683 /* UIDevice+Extention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIDevice+Extention.h"; sourceTree = "<group>"; };
+		A26BCDE3235181B600395683 /* UIButton+Extention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Extention.m"; sourceTree = "<group>"; };
+		A26BCDE4235181B600395683 /* GPUImageMovieWriter+BugFix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "GPUImageMovieWriter+BugFix.h"; sourceTree = "<group>"; };
+		A26BCDE5235181B600395683 /* UIButton+Extention.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Extention.h"; sourceTree = "<group>"; };
+		A26BCDE6235181B600395683 /* UIView+Extention.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+Extention.m"; sourceTree = "<group>"; };
+		A26BCDEB2351829F00395683 /* CCGPUImageMovieWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCGPUImageMovieWriter.h; sourceTree = "<group>"; };
+		A26BCDEC2351829F00395683 /* CCGPUImageMovieWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCGPUImageMovieWriter.m; sourceTree = "<group>"; };
 		AAB953234B5EAF795ABCFAD8 /* Pods-MPCameraTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MPCameraTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MPCameraTests/Pods-MPCameraTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C4733666AE08CD73641E8CA1 /* Pods-MPCamera.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MPCamera.release.xcconfig"; path = "Pods/Target Support Files/Pods-MPCamera/Pods-MPCamera.release.xcconfig"; sourceTree = "<group>"; };
 		E6AE1D869C71CC8F2C778EF4 /* Pods-MPCameraTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MPCameraTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MPCameraTests/Pods-MPCameraTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -184,6 +205,14 @@
 		A2536A412350865E0059E814 /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				A26BCDE4235181B600395683 /* GPUImageMovieWriter+BugFix.h */,
+				A26BCDE0235181B500395683 /* GPUImageMovieWriter+BugFix.m */,
+				A26BCDE5235181B600395683 /* UIButton+Extention.h */,
+				A26BCDE3235181B600395683 /* UIButton+Extention.m */,
+				A26BCDE2235181B600395683 /* UIDevice+Extention.h */,
+				A26BCDDF235181B500395683 /* UIDevice+Extention.m */,
+				A26BCDE1235181B600395683 /* UIView+Extention.h */,
+				A26BCDE6235181B600395683 /* UIView+Extention.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -200,6 +229,10 @@
 		A2536A432350865E0059E814 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				A26BCDEB2351829F00395683 /* CCGPUImageMovieWriter.h */,
+				A26BCDEC2351829F00395683 /* CCGPUImageMovieWriter.m */,
+				A26BCDD823517D6600395683 /* MPCameraManager.h */,
+				A26BCDD923517D6600395683 /* MPCameraManager.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -241,6 +274,7 @@
 		A2536A4C2350865E0059E814 /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				A26BCDDB23517EF400395683 /* Define */,
 				A2536A0B23507FE90059E814 /* AppDelegate.h */,
 				A2536A0C23507FE90059E814 /* AppDelegate.m */,
 				A2536A0E23507FE90059E814 /* SceneDelegate.h */,
@@ -248,6 +282,16 @@
 				A2536A542350892A0059E814 /* PrefixHeader.pch */,
 			);
 			path = Other;
+			sourceTree = "<group>";
+		};
+		A26BCDDB23517EF400395683 /* Define */ = {
+			isa = PBXGroup;
+			children = (
+				A26BCDDC23517EF400395683 /* metamacros.h */,
+				A26BCDDD23517EF400395683 /* Common.h */,
+				A26BCDDE23517EF400395683 /* EXTScope.h */,
+			);
+			path = Define;
 			sourceTree = "<group>";
 		};
 		DA838079A1095F42E8A7C830 /* Frameworks */ = {
@@ -497,9 +541,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A26BCDED2351829F00395683 /* CCGPUImageMovieWriter.m in Sources */,
+				A26BCDE8235181B600395683 /* GPUImageMovieWriter+BugFix.m in Sources */,
 				A2536A53235088AF0059E814 /* MPCameraViewController.m in Sources */,
+				A26BCDE9235181B600395683 /* UIButton+Extention.m in Sources */,
 				A2536A0D23507FE90059E814 /* AppDelegate.m in Sources */,
+				A26BCDEA235181B600395683 /* UIView+Extention.m in Sources */,
+				A26BCDDA23517D6600395683 /* MPCameraManager.m in Sources */,
 				A2536A1E23507FE90059E814 /* main.m in Sources */,
+				A26BCDE7235181B600395683 /* UIDevice+Extention.m in Sources */,
 				A2536A1023507FE90059E814 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

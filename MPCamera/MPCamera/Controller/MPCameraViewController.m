@@ -18,11 +18,7 @@
     [super viewDidLoad];
     self.navigationController.navigationBar.hidden = YES;
     self.view.backgroundColor = [UIColor whiteColor];
-    UISwitch *swicth = [[UISwitch alloc] init];
-    [self.view addSubview:swicth];
-    [swicth mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.center.equalTo(self.view);
-    }];
+    
 }
 
 /*
