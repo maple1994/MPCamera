@@ -22,6 +22,7 @@
 @property (nonatomic, strong) UIView *ratioBlurView;
 @property (nonatomic, assign) BOOL isChangingRatio;
 @property (nonatomic, strong) UIView *focusView;
+@property (nonatomic, assign) CGFloat currentVideoScale;
 
 @end
 
@@ -34,6 +35,7 @@
     [CSToastManager setDefaultDuration:1];
     [[MPCameraManager shareManager] addOutputView:self.cameraView];
     [[MPCameraManager shareManager] startCapturing];
+    self.currentVideoScale = 1.0;
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -256,7 +258,12 @@
 
 - (void)pinchAction: (UIPinchGestureRecognizer *)recognizer
 {
-    
+    CGFloat scale = recognizer.scale * self.currentVideoScale;
+    scale = [[MPCameraManager shareManager] availableVideoScaleWithScale:scale];
+    [MPCameraManager shareManager].videoScale = scale;
+    if (recognizer.state == UIGestureRecognizerStateEnded) {
+        self.currentVideoScale = scale;
+    }
 }
 
 
@@ -275,6 +282,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [[MPCameraManager shareManager] rotateCamera];
+        self.currentVideoScale = 1.0;
     });
 }
 

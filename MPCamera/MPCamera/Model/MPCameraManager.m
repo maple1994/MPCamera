@@ -98,7 +98,18 @@ static MPCameraManager *_cameraManager;
 /// 将缩放倍数转化到可用的范围
 - (CGFloat)availableVideoScaleWithScale: (CGFloat)scale
 {
-    return 0;
+    AVCaptureDevice *device = self.camera.inputCamera;
+    
+    CGFloat maxScale = kMaxVideoScale;
+    CGFloat minScale = kMinVideoScale;
+    if (@available(iOS 11.0, *)) {
+        maxScale = device.maxAvailableVideoZoomFactor;
+    }
+    
+    scale = MAX(scale, minScale);
+    scale = MIN(scale, maxScale);
+    
+    return scale;
 }
 
 /// 正在录制中的视频时长
@@ -271,6 +282,16 @@ static MPCameraManager *_cameraManager;
        }
     
        [device unlockForConfiguration];
+}
+
+- (void)setVideoScale:(CGFloat)videoScale
+{
+    _videoScale = videoScale;
+    videoScale = [self availableVideoScaleWithScale:videoScale];
+    AVCaptureDevice *device = self.camera.inputCamera;
+    [device lockForConfiguration:nil];
+    device.videoZoomFactor = videoScale;
+    [device unlockForConfiguration];
 }
 
 @end
