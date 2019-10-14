@@ -20,7 +20,7 @@ static MPCameraManager *_cameraManager;
 @property (nonatomic, strong) GPUImageMovieWriter *movieWrite;
 @property (nonatomic, copy) NSString *currentTmpVideoPath;
 @property (nonatomic, assign) CGSize videoSize;
-
+@property (nonatomic, strong) GPUImageFilter *baseFilter;
 
 @end
 
@@ -40,7 +40,15 @@ static MPCameraManager *_cameraManager;
 /// 拍照
 - (void)takePhotoWithCompletion: (TakePhotoResult)completion
 {
-    
+    [self.camera capturePhotoAsImageProcessedUpToFilter:self.baseFilter withCompletionHandler:^(UIImage *processedImage, NSError *error) {
+        if (error && completion) {
+            completion(nil, error);
+        }else {
+            if (completion) {
+                completion(processedImage, nil);
+            }
+        }
+    }];
 }
 
 /// 录像
@@ -69,7 +77,9 @@ static MPCameraManager *_cameraManager;
         return;
     }
     [self setupCamera];
-    [self.camera addTarget:self.outputView];
+    self.baseFilter = [[GPUImageFilter alloc] init];
+    [self.camera addTarget:self.baseFilter];
+    [self.baseFilter addTarget:self.outputView];
     [self.camera startCameraCapture];
 }
 
@@ -125,7 +135,7 @@ static MPCameraManager *_cameraManager;
 {
     self.camera = [[GPUImageStillCamera alloc] initWithSessionPreset:AVCaptureSessionPreset1280x720 cameraPosition:AVCaptureDevicePositionBack];
     self.camera.outputImageOrientation = UIInterfaceOrientationPortrait;
-//    self.camera.horizontallyMirrorFrontFacingCamera = YES;
+    self.camera.horizontallyMirrorFrontFacingCamera = YES;
     [self.camera addAudioInputsAndOutputs];
 }
 

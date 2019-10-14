@@ -71,7 +71,8 @@ typedef NS_ENUM(NSUInteger, MPCameraRatio) {
 - (CGFloat)availableVideoScaleWithScale: (CGFloat)scale;
 /// 正在录制中的视频时长
 - (NSTimeInterval)currentDuration;
-
+/// 根据选择的比例返回size
+- (CGSize)videoSizeWithRatio: (MPCameraRatio)ratio;
 
 
 @end
