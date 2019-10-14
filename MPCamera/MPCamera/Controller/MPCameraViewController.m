@@ -21,6 +21,7 @@
 /// 设置比例时的毛玻璃View
 @property (nonatomic, strong) UIView *ratioBlurView;
 @property (nonatomic, assign) BOOL isChangingRatio;
+@property (nonatomic, strong) UIView *focusView;
 
 @end
 
@@ -60,9 +61,20 @@
         view.hidden = YES;
         view;
     });
+    self.focusView = ({
+        UIView *view = [[UIView alloc] init];
+        view.frame = CGRectMake(0, 0, 60, 60);
+        view.layer.borderColor = [UIColor whiteColor].CGColor;
+        view.layer.borderWidth = 1;
+        view.layer.cornerRadius = 30;
+        view.layer.masksToBounds = YES;
+        view.alpha = 0;
+        view;
+    });
     [self.view addSubview:self.ratioBlurView];
     [self.view addSubview:self.capturingButton];
     [self.view addSubview:self.topView];
+    [self.view addSubview:self.focusView];
     
     [self.ratioBlurView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.cameraView);
@@ -92,6 +104,24 @@
     self.cameraView = [[GPUImageView alloc] init];
     [self.view addSubview:self.cameraView];
     [self refreshCameraViewWithRatio:[MPCameraManager shareManager].ratio];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapAction:)];
+    UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchAction:)];
+    [self.cameraView addGestureRecognizer:tap];
+    [self.cameraView addGestureRecognizer:pinch];
+}
+
+- (void)showFocusViewWithLocation: (CGPoint)location
+{
+    self.focusView.center = location;
+    self.focusView.transform = CGAffineTransformMakeScale(1.6, 1.6);
+    [self.focusView setHidden:NO animated:YES completion:nil];
+    [UIView animateWithDuration:0.25 animations:^{
+        self.focusView.transform = CGAffineTransformIdentity;
+    } completion:^(BOOL finished) {
+        [UIView animateKeyframesWithDuration:0.2 delay:0.8 options:UIViewKeyframeAnimationOptionCalculationModeLinear animations:^{
+            self.focusView.alpha = 0;
+        } completion:nil];
+    }];
 }
 
 - (void)changeViewToRatio: (MPCameraRatio)ratio animated: (BOOL)animated completion: (void(^)(void))completion
@@ -216,6 +246,19 @@
         [self.navigationController pushViewController:resultVC animated:NO];
     }];
 }
+
+- (void)tapAction: (UITapGestureRecognizer *)recognizer
+{
+    CGPoint location = [recognizer locationInView:self.cameraView];
+    [[MPCameraManager shareManager] setFocusPoint:location];
+    [self showFocusViewWithLocation:location];
+}
+
+- (void)pinchAction: (UIPinchGestureRecognizer *)recognizer
+{
+    
+}
+
 
 - (void)startRecordVideo
 {

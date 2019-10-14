@@ -248,4 +248,29 @@ static MPCameraManager *_cameraManager;
     [self syncFlashState];
 }
 
+- (void)setFocusPoint:(CGPoint)focusPoint
+{
+    _focusPoint = focusPoint;
+    AVCaptureDevice *device = self.camera.inputCamera;
+    // 坐标转换
+    CGPoint currentPoint = CGPointMake(focusPoint.y / self.outputView.bounds.size.height, 1 - focusPoint.x / self.outputView.bounds.size.width);
+    if (self.camera.cameraPosition == AVCaptureDevicePositionFront) {
+        currentPoint = CGPointMake(currentPoint.x, 1 - currentPoint.y);
+    }
+    [device lockForConfiguration:nil];
+       
+       if ([device isFocusPointOfInterestSupported] &&
+           [device isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
+           [device setFocusPointOfInterest:currentPoint];
+           [device setFocusMode:AVCaptureFocusModeAutoFocus];
+       }
+       if ([device isExposurePointOfInterestSupported] &&
+           [device isExposureModeSupported:AVCaptureExposureModeAutoExpose]) {
+           [device setExposurePointOfInterest:currentPoint];
+           [device setExposureMode:AVCaptureExposureModeAutoExpose];
+       }
+    
+       [device unlockForConfiguration];
+}
+
 @end
