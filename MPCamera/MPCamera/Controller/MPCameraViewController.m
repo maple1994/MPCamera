@@ -29,6 +29,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setupUI];
+    [CSToastManager setDefaultPosition:CSToastPositionCenter];
+    [CSToastManager setDefaultDuration:1];
     [[MPCameraManager shareManager] addOutputView:self.cameraView];
     [[MPCameraManager shareManager] startCapturing];
 }
@@ -158,6 +160,26 @@
     }
 }
 
+- (void)updateFlashButtonWithFlashMode: (MPCameraFlashMode)mode
+{
+    switch (mode) {
+        case MPCameraFlashModeOff:
+            [self.topView.flashButton setEnableDarkWithImageName:@"btn_flash_off"];
+            break;
+        case MPCameraFlashModeOn:
+            [self.topView.flashButton setEnableDarkWithImageName:@"btn_flash_on"];
+            break;
+        case MPCameraFlashModeAuto:
+            [self.topView.flashButton setEnableDarkWithImageName:@"btn_flash_auto"];
+            break;
+        case MPCameraFlashModeTorch:
+            [self.topView.flashButton setEnableDarkWithImageName:@"btn_flash_torch"];
+            break;
+        default:
+            break;
+    }
+}
+
 - (void)refreshCameraViewWithRatio: (MPCameraRatio)ratio
 {
     CGFloat cameraHeight = [self cameraViewHeightWithRatio:ratio];
@@ -208,12 +230,19 @@
 // MARK: - MPCameraTopViewDelegate
 - (void)cameraTopViewDidClickRotateButton: (MPCameraTopView *)cameraTopView
 {
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[MPCameraManager shareManager] rotateCamera];
+    });
 }
+
 - (void)cameraTopViewDidClickFlashButton: (MPCameraTopView *)cameraTopView
 {
-    
+    MPCameraFlashMode flashMode = [MPCameraManager shareManager].flashMode;
+    flashMode = (flashMode + 1) % 4;
+    [MPCameraManager shareManager].flashMode = flashMode;
+    [self updateFlashButtonWithFlashMode:flashMode];
 }
+
 - (void)cameraTopViewDidClickRatioButton: (MPCameraTopView *)cameraTopView
 {
     MPCameraRatio ratio = [MPCameraManager shareManager].ratio;

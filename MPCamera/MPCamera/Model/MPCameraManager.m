@@ -85,7 +85,8 @@ static MPCameraManager *_cameraManager;
 /// 切换摄像头
 - (void)rotateCamera
 {
-    
+    [self.camera rotateCamera];
+    [self syncFlashState];
 }
 
 /// 刷新闪光灯
@@ -139,6 +140,48 @@ static MPCameraManager *_cameraManager;
     [self.camera addAudioInputsAndOutputs];
 }
 
+- (void)syncFlashState
+{
+    AVCaptureDevice *device = self.camera.inputCamera;
+    if (!device.hasFlash || self.camera.cameraPosition == AVCaptureDevicePositionFront) {
+        [self closeFlashIfNeeded];
+        return;
+    }
+    [device lockForConfiguration:nil];
+    switch (self.flashMode) {
+        case MPCameraFlashModeOff:
+            device.torchMode = AVCaptureTorchModeOff;
+            device.flashMode = AVCaptureFlashModeOff;
+            break;
+        case MPCameraFlashModeOn:
+            device.torchMode = AVCaptureTorchModeOff;
+            device.flashMode = AVCaptureFlashModeOn;
+            break;
+        case MPCameraFlashModeAuto:
+            device.torchMode = AVCaptureTorchModeOff;
+            device.flashMode = AVCaptureFlashModeAuto;
+            break;
+        case MPCameraFlashModeTorch:
+            device.torchMode = AVCaptureTorchModeOn;
+            device.flashMode = AVCaptureFlashModeOff;
+            break;
+        default:
+            break;
+    }
+    [device unlockForConfiguration];
+}
+
+- (void)closeFlashIfNeeded
+{
+    AVCaptureDevice *device = self.camera.inputCamera;
+    if (device.hasFlash && device.torchMode == AVCaptureTorchModeOn) {
+        [device lockForConfiguration:nil];
+        device.torchMode = AVCaptureTorchModeOff;
+        device.flashMode = AVCaptureFlashModeOff;
+        [device unlockForConfiguration];
+    }
+}
+
 - (CGSize)videoSizeWithRatio: (MPCameraRatio)ratio
 {
     CGFloat videoWidth = SCREEN_WIDTH * SCREEN_SCALE;
@@ -162,6 +205,7 @@ static MPCameraManager *_cameraManager;
     return CGSizeMake(videoWidth, videoHeight);
 }
 
+// MARK: - Setter
 - (void)setRatio:(MPCameraRatio)ratio
 {
     _ratio = ratio;
@@ -196,6 +240,12 @@ static MPCameraManager *_cameraManager;
     }
     [self.fileterHandler setCropRect:rect];
     self.videoSize = [self videoSizeWithRatio:ratio];
+}
+
+- (void)setFlashMode:(MPCameraFlashMode)flashMode
+{
+    _flashMode = flashMode;
+    [self syncFlashState];
 }
 
 @end
