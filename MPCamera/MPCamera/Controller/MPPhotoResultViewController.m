@@ -46,7 +46,7 @@
     });
     self.backButton = ({
         UIButton *btn = [[UIButton alloc] init];
-        [btn setImage:[UIImage imageNamed:@"btn_back"] forState:UIControlStateNormal];
+        [btn setEnableDarkWithImageName:@"btn_back"];
         [btn addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
         btn;
     });
@@ -83,6 +83,7 @@
         make.height.width.mas_equalTo(35);
         make.leading.equalTo(self.view).offset(leftOffset);
     }];
+    [self updateDarkOrNormalMode];
 }
 
 - (void)updateDarkOrNormalMode

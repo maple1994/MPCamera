@@ -18,6 +18,9 @@
 @property (nonatomic, strong) GPUImageView *cameraView;
 @property (nonatomic, strong) MPCapturingButton *capturingButton;
 @property (nonatomic, strong) MPCameraTopView *topView;
+/// 设置比例时的毛玻璃View
+@property (nonatomic, strong) UIView *ratioBlurView;
+@property (nonatomic, assign) BOOL isChangingRatio;
 
 @end
 
@@ -49,10 +52,19 @@
     [self.capturingButton addTarget:self action:@selector(captureAction) forControlEvents:UIControlEventTouchUpInside];
     self.topView = [[MPCameraTopView alloc] init];
     self.topView.delegate = self;
-    
+    self.ratioBlurView = ({
+        UIBlurEffect *effct = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+        UIVisualEffectView *view = [[UIVisualEffectView alloc] initWithEffect:effct];
+        view.hidden = YES;
+        view;
+    });
+    [self.view addSubview:self.ratioBlurView];
     [self.view addSubview:self.capturingButton];
     [self.view addSubview:self.topView];
     
+    [self.ratioBlurView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.cameraView);
+    }];
     [self.capturingButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.width.mas_equalTo(80);
         make.centerX.equalTo(self.view);
@@ -82,6 +94,9 @@
 
 - (void)changeViewToRatio: (MPCameraRatio)ratio animated: (BOOL)animated completion: (void(^)(void))completion
 {
+    if (self.isChangingRatio) {
+        return;
+    }
     if ([MPCameraManager shareManager].ratio == ratio) {
         if (completion) {
             completion();
@@ -95,14 +110,32 @@
         }
         return;
     }
+    self.ratioBlurView.hidden = NO;
+    self.isChangingRatio = YES;
     [UIView animateWithDuration:0.2 animations:^{
         [self refreshCameraViewWithRatio:ratio];
         [self.view layoutIfNeeded];
     } completion:^(BOOL finished) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            self.ratioBlurView.hidden = YES;
+            self.isChangingRatio = NO;
+        });
         if (completion) {
             completion();
         }
     }];
+}
+
+- (void)updateDarkOrNormalModeWithRatio: (MPCameraRatio)ratio
+{
+    BOOL isIPhoneX = [UIDevice is_iPhoneX_Series];
+    BOOL isTopBarDark = ratio == MPCameraRatio1v1 || (isIPhoneX && ratio != MPCameraRatioFull);
+    [self.topView.flashButton setIsDarkMode:isTopBarDark];
+    [self.topView.ratioButton setIsDarkMode:isTopBarDark];
+    [self.topView.rotateButton setIsDarkMode:isTopBarDark];
+    [self.topView.closeButton setIsDarkMode:isTopBarDark];
+    
+//    BOOL isBottomBarDatk = ratio == MPCameraRatio1v1 || ratio == MPCameraRatio4v3;
 }
 
 - (void)updateRatioButtonWithRatio: (MPCameraRatio)ratio
@@ -190,6 +223,7 @@
         [MPCameraManager shareManager].ratio = nextRatio;
     }];
     [self updateRatioButtonWithRatio:nextRatio];
+    [self updateDarkOrNormalModeWithRatio:nextRatio];
 }
 
 - (void)cameraTopViewDidClickCloseButton: (MPCameraTopView *)cameraTopView
