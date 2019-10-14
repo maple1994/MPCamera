@@ -26,6 +26,10 @@
     self.contentImageView.image = self.resultImage;
 }
 
+- (BOOL)prefersStatusBarHidden {
+    return YES;
+}
+
 - (void)setupUI
 {
     self.navigationController.navigationBar.hidden = YES;

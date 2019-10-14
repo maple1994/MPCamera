@@ -11,6 +11,7 @@
 		0668AD8CEE8AF521F2516885 /* libPods-MPCamera.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E8AEC4CBA3E95DE6FA1C73B /* libPods-MPCamera.a */; };
 		A233DACD2354136C005BB700 /* MPCapturingButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A233DACC2354136C005BB700 /* MPCapturingButton.m */; };
 		A233DAD023541756005BB700 /* MPPhotoResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A233DACF23541756005BB700 /* MPPhotoResultViewController.m */; };
+		A233DAD323544FD0005BB700 /* MPCameraTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = A233DAD223544FD0005BB700 /* MPCameraTopView.m */; };
 		A2536A0D23507FE90059E814 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A2536A0C23507FE90059E814 /* AppDelegate.m */; };
 		A2536A1023507FE90059E814 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A2536A0F23507FE90059E814 /* SceneDelegate.m */; };
 		A2536A1823507FE90059E814 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2536A1723507FE90059E814 /* Assets.xcassets */; };
@@ -61,6 +62,8 @@
 		A233DACC2354136C005BB700 /* MPCapturingButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPCapturingButton.m; sourceTree = "<group>"; };
 		A233DACE23541756005BB700 /* MPPhotoResultViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPPhotoResultViewController.h; sourceTree = "<group>"; };
 		A233DACF23541756005BB700 /* MPPhotoResultViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPPhotoResultViewController.m; sourceTree = "<group>"; };
+		A233DAD123544FD0005BB700 /* MPCameraTopView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPCameraTopView.h; sourceTree = "<group>"; };
+		A233DAD223544FD0005BB700 /* MPCameraTopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPCameraTopView.m; sourceTree = "<group>"; };
 		A2536A0823507FE90059E814 /* MPCamera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MPCamera.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2536A0B23507FE90059E814 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A2536A0C23507FE90059E814 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -255,6 +258,8 @@
 			children = (
 				A233DACB2354136C005BB700 /* MPCapturingButton.h */,
 				A233DACC2354136C005BB700 /* MPCapturingButton.m */,
+				A233DAD123544FD0005BB700 /* MPCameraTopView.h */,
+				A233DAD223544FD0005BB700 /* MPCameraTopView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -568,6 +573,7 @@
 				A2536A1E23507FE90059E814 /* main.m in Sources */,
 				A26BCDE7235181B600395683 /* UIDevice+Extention.m in Sources */,
 				A233DAD023541756005BB700 /* MPPhotoResultViewController.m in Sources */,
+				A233DAD323544FD0005BB700 /* MPCameraTopView.m in Sources */,
 				A2536A1023507FE90059E814 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

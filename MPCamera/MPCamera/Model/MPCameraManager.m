@@ -20,7 +20,6 @@ static MPCameraManager *_cameraManager;
 @property (nonatomic, strong) GPUImageMovieWriter *movieWrite;
 @property (nonatomic, copy) NSString *currentTmpVideoPath;
 @property (nonatomic, assign) CGSize videoSize;
-@property (nonatomic, strong) GPUImageFilter *baseFilter;
 
 @end
 
@@ -40,7 +39,8 @@ static MPCameraManager *_cameraManager;
 /// 拍照
 - (void)takePhotoWithCompletion: (TakePhotoResult)completion
 {
-    [self.camera capturePhotoAsImageProcessedUpToFilter:self.baseFilter withCompletionHandler:^(UIImage *processedImage, NSError *error) {
+    GPUImageFilter *lastFilter = [self.fileterHandler lastFilter];
+    [self.camera capturePhotoAsImageProcessedUpToFilter:lastFilter withCompletionHandler:^(UIImage *processedImage, NSError *error) {
         if (error && completion) {
             completion(nil, error);
         }else {
@@ -77,9 +77,8 @@ static MPCameraManager *_cameraManager;
         return;
     }
     [self setupCamera];
-    self.baseFilter = [[GPUImageFilter alloc] init];
-    [self.camera addTarget:self.baseFilter];
-    [self.baseFilter addTarget:self.outputView];
+    [self.camera addTarget:[self.fileterHandler firstFilter]];
+    [[self.fileterHandler lastFilter] addTarget:self.outputView];
     [self.camera startCameraCapture];
 }
 
@@ -122,6 +121,7 @@ static MPCameraManager *_cameraManager;
     self.flashMode = MPCameraFlashModeOff;
     self.ratio = MPCameraRatio16v9;
     self.videoSize = [self videoSizeWithRatio:self.ratio];
+    self.fileterHandler = [[MPFilterHandler alloc] init];
     [self setupFilterHandler];
 }
 
@@ -160,6 +160,42 @@ static MPCameraManager *_cameraManager;
             break;
     }
     return CGSizeMake(videoWidth, videoHeight);
+}
+
+- (void)setRatio:(MPCameraRatio)ratio
+{
+    _ratio = ratio;
+    CGRect rect = CGRectMake(0, 0, 1, 1);
+    switch (ratio) {
+        case MPCameraRatio1v1:
+            self.camera.captureSessionPreset = AVCaptureSessionPreset640x480;
+            CGFloat space = (4 - 3) / 4.0; // 竖直方向应该裁剪掉的空间
+            rect = CGRectMake(0, space / 2, 1, 1 - space);
+            break;
+        case MPCameraRatio4v3:
+            self.camera.captureSessionPreset = AVCaptureSessionPreset640x480;
+            break;
+        case MPCameraRatio16v9:
+            self.camera.captureSessionPreset = AVCaptureSessionPreset1280x720;
+            break;
+        case MPCameraRatioFull:
+            self.camera.captureSessionPreset = AVCaptureSessionPreset1280x720;
+            CGFloat currentRatio = SCREEN_HEIGHT / SCREEN_WIDTH;
+            if (currentRatio > 16.0 / 9.0) { // 需要在水平方向裁剪
+                CGFloat resultWidth = 16.0 / currentRatio;
+                CGFloat space = (9.0 - resultWidth) / 9.0;
+                rect = CGRectMake(space / 2, 0, 1 - space, 1);
+            } else { // 需要在竖直方向裁剪
+                CGFloat resultHeight = 9.0 * currentRatio;
+                CGFloat space = (16.0 - resultHeight) / 16.0;
+                rect = CGRectMake(0, space / 2, 1, 1 - space);
+            }
+            break;
+        default:
+            break;
+    }
+    [self.fileterHandler setCropRect:rect];
+    self.videoSize = [self videoSizeWithRatio:ratio];
 }
 
 @end
