@@ -28,6 +28,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) UIButton *closeButton;
 @property (nonatomic, weak) id<MPCameraTopViewDelegate> delegate;
 
+- (void)refreshUIWithIsRecording: (BOOL)isRecording;
+- (void)updateDarkMode: (BOOL)isDark;
 
 @end
 

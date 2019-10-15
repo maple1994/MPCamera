@@ -30,6 +30,13 @@
 
 - (void)setupUI
 {
+    self.closeButton = ({
+        UIButton *btn = [[UIButton alloc] init];
+        [btn addTarget:self action:@selector(closeAction) forControlEvents:UIControlEventTouchUpInside];
+        btn.alpha = 0;
+        [btn setEnableDarkWithImageName:@"btn_close"];
+        btn;
+    });
     self.ratioButton = ({
         UIButton *btn = [[UIButton alloc] init];
         [btn addTarget:self action:@selector(ratioAction) forControlEvents:UIControlEventTouchUpInside];
@@ -49,10 +56,16 @@
         btn;
     });
     
+    [self addSubview:self.closeButton];
     [self addSubview:self.ratioButton];
     [self addSubview:self.rotateButton];
     [self addSubview:self.flashButton];
     
+    [self.closeButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.mas_equalTo(30);
+        make.centerY.equalTo(self);
+        make.leading.equalTo(self).offset(20);
+    }];
     [self.ratioButton mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.mas_equalTo(30);
         make.center.equalTo(self);
@@ -67,6 +80,21 @@
         make.centerY.equalTo(self);
         make.leading.equalTo(self).offset(20);
     }];
+}
+
+- (void)refreshUIWithIsRecording: (BOOL)isRecording
+{
+    [self.flashButton setHidden:isRecording animated:YES completion:nil];
+    [self.ratioButton setHidden:isRecording animated:YES completion:nil];
+    [self.rotateButton setHidden:isRecording animated:YES completion:nil];
+}
+
+- (void)updateDarkMode: (BOOL)isDark
+{
+    [self.flashButton setIsDarkMode:isDark];
+    [self.ratioButton setIsDarkMode:isDark];
+    [self.rotateButton setIsDarkMode:isDark];
+    [self.closeButton setIsDarkMode:isDark];
 }
 
 // MARK: - Action
@@ -98,6 +126,13 @@
     }];
     if ([self.delegate respondsToSelector:@selector(cameraTopViewDidClickRotateButton:)]) {
         [self.delegate cameraTopViewDidClickRotateButton:self];
+    }
+}
+
+- (void)closeAction
+{
+    if ([self.delegate respondsToSelector:@selector(cameraTopViewDidClickCloseButton:)]) {
+        [self.delegate cameraTopViewDidClickCloseButton:self];
     }
 }
 

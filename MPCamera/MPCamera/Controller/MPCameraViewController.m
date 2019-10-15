@@ -12,8 +12,12 @@
 #import "MPCapturingButton.h"
 #import "MPPhotoResultViewController.h"
 #import "MPCameraTopView.h"
+#import "MPCapturingModeSwitchView.h"
+#import "MPCamerVideoTimeLabel.h"
 
-@interface MPCameraViewController ()<MPCameraTopViewDelegate>
+@interface MPCameraViewController ()<
+    MPCameraTopViewDelegate,
+    MPCapturingModeSwitchViewDelegate>
 
 @property (nonatomic, strong) GPUImageView *cameraView;
 @property (nonatomic, strong) MPCapturingButton *capturingButton;
@@ -23,6 +27,12 @@
 @property (nonatomic, assign) BOOL isChangingRatio;
 @property (nonatomic, strong) UIView *focusView;
 @property (nonatomic, assign) CGFloat currentVideoScale;
+@property (nonatomic, strong) MPCapturingModeSwitchView *modeSwitchView;
+@property (nonatomic, assign) BOOL isRecordingVideo;
+@property (nonatomic, strong) MPCamerVideoTimeLabel *videoTimeLabel;
+@property (nonatomic, strong) NSTimer *videoTimer;
+@property (nonatomic, strong) NSDate *oldDate;
+@property (nonatomic, strong) UIButton *nextButton;
 
 @end
 
@@ -73,9 +83,27 @@
         view.alpha = 0;
         view;
     });
+    self.modeSwitchView = ({
+        MPCapturingModeSwitchView *switchView = [[MPCapturingModeSwitchView alloc] init];
+        switchView.delegate = self;
+        switchView;
+    });
+    self.nextButton = ({
+        UIButton *btn = [[UIButton alloc] init];
+        btn.alpha = 0;
+        [btn setEnableDarkWithImageName:@"btn_next"];
+        [btn addTarget:self action:@selector(nextAction) forControlEvents:UIControlEventTouchUpInside];
+        btn;
+    });
+    self.videoTimeLabel = [[MPCamerVideoTimeLabel alloc] init];
+    self.videoTimeLabel.alpha = 0;
+    
     [self.view addSubview:self.ratioBlurView];
     [self.view addSubview:self.capturingButton];
     [self.view addSubview:self.topView];
+    [self.view addSubview:self.modeSwitchView];
+    [self.view addSubview:self.videoTimeLabel];
+    [self.view addSubview:self.nextButton];
     [self.view addSubview:self.focusView];
     
     [self.ratioBlurView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -89,6 +117,21 @@
         }else {
             make.bottom.equalTo(self.view).offset(-40);
         }
+    }];
+    CGFloat offset = (SCREEN_WIDTH * 0.5 - 40 - 35) * 0.5;
+    [self.nextButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.capturingButton);
+        make.width.height.mas_equalTo(35);
+        make.trailing.equalTo(self.view).offset(-offset);
+    }];
+    [self.modeSwitchView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.capturingButton);
+        make.top.equalTo(self.capturingButton.mas_bottom);
+        make.width.mas_equalTo(100);
+        make.height.mas_equalTo(40);
+    }];
+    [self.videoTimeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.modeSwitchView);
     }];
     [self.topView mas_makeConstraints:^(MASConstraintMaker *make) {
         if (@available(iOS 11.0, *)) {
@@ -164,12 +207,10 @@
 {
     BOOL isIPhoneX = [UIDevice is_iPhoneX_Series];
     BOOL isTopBarDark = ratio == MPCameraRatio1v1 || (isIPhoneX && ratio != MPCameraRatioFull);
-    [self.topView.flashButton setIsDarkMode:isTopBarDark];
-    [self.topView.ratioButton setIsDarkMode:isTopBarDark];
-    [self.topView.rotateButton setIsDarkMode:isTopBarDark];
-    [self.topView.closeButton setIsDarkMode:isTopBarDark];
+    [self.topView updateDarkMode:isTopBarDark];
     
-//    BOOL isBottomBarDatk = ratio == MPCameraRatio1v1 || ratio == MPCameraRatio4v3;
+    BOOL isBottomBarDatk = ratio == MPCameraRatio1v1 || ratio == MPCameraRatio4v3;
+    self.modeSwitchView.isDarkMode = isBottomBarDatk;
 }
 
 - (void)updateRatioButtonWithRatio: (MPCameraRatio)ratio
@@ -212,6 +253,13 @@
     }
 }
 
+- (void)refreshUIWhenRecordVideo
+{
+    [self.topView refreshUIWithIsRecording:self.isRecordingVideo];
+    [self.modeSwitchView setHidden:self.isRecordingVideo animated:YES completion:nil];
+    [self.nextButton setHidden:YES animated:YES completion:nil];
+}
+
 - (void)refreshCameraViewWithRatio: (MPCameraRatio)ratio
 {
     CGFloat cameraHeight = [self cameraViewHeightWithRatio:ratio];
@@ -235,7 +283,15 @@
 // MARK: - Action
 - (void)captureAction
 {
-    [self takePhoto];
+    if (self.modeSwitchView.type == MPCapturingModeSwitchTypeImage) {
+        [self takePhoto];
+    }else {
+        if (self.isRecordingVideo) {
+            [self stopRecordVideo];
+        }else {
+            [self startRecordVideo];
+        }
+    }
 }
 
 - (void)takePhoto
@@ -247,6 +303,11 @@
         resultVC.resultImage = resultImage;
         [self.navigationController pushViewController:resultVC animated:NO];
     }];
+}
+
+- (void)nextAction
+{
+    
 }
 
 - (void)tapAction: (UITapGestureRecognizer *)recognizer
@@ -269,12 +330,45 @@
 
 - (void)startRecordVideo
 {
-    
+    if (self.isRecordingVideo)
+        return;
+    self.isRecordingVideo = YES;
+    self.capturingButton.capturingState = MPCapturingModeSwitchTypeVideo;
+    [self refreshUIWhenRecordVideo];
+    [self.topView.closeButton setHidden:YES animated:YES completion:nil];
+    self.oldDate = [NSDate date];
+    [self startVideoTimer];
 }
 
 - (void)stopRecordVideo
 {
-    
+    if (!self.isRecordingVideo) {
+        return;
+    }
+    self.isRecordingVideo = NO;
+    self.capturingButton.capturingState = MPCapturingModeSwitchTypeImage;
+    [self.topView.closeButton setHidden:NO animated:YES completion:nil];
+    [self.nextButton setHidden:NO animated:YES completion:nil];
+    [self endVideoTimer];
+}
+
+- (void)timerAction
+{
+    NSDate *current = [NSDate date];
+    NSInteger timestamp = (NSInteger)[current timeIntervalSinceDate:self.oldDate];
+    self.videoTimeLabel.timestamp = timestamp;
+    [self.videoTimeLabel setHidden:NO animated:YES completion:nil];
+}
+
+- (void)startVideoTimer
+{
+    self.videoTimer = [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(timerAction) userInfo:nil repeats:YES];
+}
+
+- (void)endVideoTimer
+{
+    [self.videoTimer invalidate];
+    self.videoTimer = nil;
 }
 
 // MARK: - MPCameraTopViewDelegate
@@ -307,6 +401,15 @@
 }
 
 - (void)cameraTopViewDidClickCloseButton: (MPCameraTopView *)cameraTopView
+{
+    [self.topView.closeButton setHidden:YES animated:YES completion:nil];
+    self.isRecordingVideo = NO;
+    [self refreshUIWhenRecordVideo];
+    self.videoTimeLabel.alpha = 0;
+}
+
+// MARK: - MPCapturingModeSwitchViewDelegate
+- (void)capturingModeSwitchView:(MPCapturingModeSwitchView *)view didChangeType:(MPCapturingModeSwitchType)type
 {
     
 }
