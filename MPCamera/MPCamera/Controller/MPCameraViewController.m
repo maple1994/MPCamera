@@ -16,6 +16,9 @@
 #import "MPCamerVideoTimeLabel.h"
 #import "MPVideoModel.h"
 #import "MPVideoResultViewController.h"
+#import "MPFilterBarView.h"
+
+static CGFloat const kFilterBarViewHeight = 200.0f;  // 滤镜栏高度
 
 @interface MPCameraViewController ()<
     MPCameraTopViewDelegate,
@@ -35,6 +38,8 @@
 @property (nonatomic, strong) NSTimer *videoTimer;
 @property (nonatomic, strong) UIButton *nextButton;
 @property (nonatomic, strong) NSMutableArray<MPVideoModel *>*videos;
+@property (nonatomic, strong) UIButton *filterButton;
+@property (nonatomic, strong) MPFilterBarView *filterBarView;
 
 @end
 
@@ -98,6 +103,16 @@
         [btn addTarget:self action:@selector(nextAction) forControlEvents:UIControlEventTouchUpInside];
         btn;
     });
+    self.filterButton = ({
+        UIButton *btn = [[UIButton alloc] init];
+        [btn setEnableDarkWithImageName:@"btn_filter"];
+        [btn addTarget:self action:@selector(filterAction) forControlEvents:UIControlEventTouchUpInside];
+        btn;
+    });
+    self.filterBarView = ({
+        MPFilterBarView *view = [[MPFilterBarView alloc] init];
+        view;
+    });
     self.videoTimeLabel = [[MPCamerVideoTimeLabel alloc] init];
     self.videoTimeLabel.alpha = 0;
     
@@ -107,7 +122,9 @@
     [self.view addSubview:self.modeSwitchView];
     [self.view addSubview:self.videoTimeLabel];
     [self.view addSubview:self.nextButton];
+    [self.view addSubview:self.filterButton];
     [self.view addSubview:self.focusView];
+    [self.view addSubview:self.filterBarView];
     
     [self.ratioBlurView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.cameraView);
@@ -127,6 +144,11 @@
         make.width.height.mas_equalTo(35);
         make.trailing.equalTo(self.view).offset(-offset);
     }];
+    [self.filterButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.capturingButton);
+        make.width.height.mas_equalTo(35);
+        make.leading.equalTo(self.view).offset(offset);
+    }];
     [self.modeSwitchView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.capturingButton);
         make.top.equalTo(self.capturingButton.mas_bottom);
@@ -145,6 +167,11 @@
         make.leading.trailing.equalTo(self.view);
         make.height.mas_equalTo(60);
     }];
+    [self.filterBarView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.leading.trailing.bottom.equalTo(self.view);
+        make.top.mas_equalTo(self.view.mas_bottom).offset(0);
+    }];
+    [self.filterBarView layoutIfNeeded];
 }
 
 - (void)setupCamera
@@ -214,6 +241,7 @@
     
     BOOL isBottomBarDatk = ratio == MPCameraRatio1v1 || ratio == MPCameraRatio4v3;
     self.modeSwitchView.isDarkMode = isBottomBarDatk;
+    [self.filterButton setIsDarkMode:isBottomBarDatk];
 }
 
 - (void)updateRatioButtonWithRatio: (MPCameraRatio)ratio
@@ -256,6 +284,51 @@
     }
 }
 
+- (void)setFilterBarViewHidden:(BOOL)hidden
+  animated:(BOOL)animated
+completion:(void (^)(void))completion {
+    void (^updateBlock)(void) = ^ {
+        [self.filterBarView mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.bottom.equalTo(self.view);
+            if (hidden) {
+                make.top.mas_equalTo(self.view.mas_bottom).offset(0);
+            } else {
+                if (@available(iOS 11.0, *)) {
+                    make.top.mas_equalTo(self.view.mas_safeAreaLayoutGuideBottom).offset(-kFilterBarViewHeight);
+                } else {
+                    make.top.mas_equalTo(self.view.mas_bottom).offset(-kFilterBarViewHeight);
+                }
+            }
+        }];
+    };
+    
+    self.filterBarView.showing = !hidden;
+    if (animated) {
+        [UIView animateWithDuration:0.25f animations:^{
+            updateBlock();
+            [self.view layoutIfNeeded];
+        } completion:^(BOOL finished) {
+            if (completion) {
+                completion();
+            }
+        }];
+    } else {
+        updateBlock();
+        if (completion) {
+            completion();
+        }
+    }
+}
+
+- (void)dismissFilterBar
+{
+    [self setFilterBarViewHidden:YES
+                        animated:YES
+                      completion:NULL];
+    
+    [self refreshUIWhenFilterBarShowOrHide];
+}
+
 - (void)refreshUIWhenRecordVideo
 {
     [self.topView refreshUIWithIsRecording:self.isRecordingVideo];
@@ -283,6 +356,32 @@
     }];
 }
 
+- (void)refreshUIWhenFilterBarShowOrHide
+{
+    [self.capturingButton setHidden:self.filterBarView.showing
+      animated:YES
+    completion:nil];
+    [self.modeSwitchView setHidden:self.filterBarView.showing
+      animated:YES
+    completion:nil];
+    [self.filterButton setHidden:self.filterBarView.showing
+      animated:YES
+    completion:nil];
+    
+    BOOL hidden = self.videos.count == 0 ||
+    self.isRecordingVideo ||
+    self.filterBarView.showing;
+    [self.nextButton setHidden:hidden
+      animated:YES
+    completion:nil];
+    hidden = (self.videos.count == 0 &&
+                  !self.isRecordingVideo) ||
+                  self.filterBarView.showing;
+    [self.videoTimeLabel setHidden:hidden
+                          animated:YES
+                        completion:NULL];
+}
+
 // MARK: - Action
 - (void)captureAction
 {
@@ -308,6 +407,12 @@
     }];
 }
 
+- (void)filterAction
+{
+    [self setFilterBarViewHidden:NO animated:YES completion:nil];
+    [self refreshUIWhenFilterBarShowOrHide];
+}
+
 - (void)nextAction
 {
     MPVideoResultViewController *vc = [[MPVideoResultViewController alloc] init];
@@ -323,6 +428,10 @@
 
 - (void)tapAction: (UITapGestureRecognizer *)recognizer
 {
+    if (self.filterBarView.showing) {
+        [self dismissFilterBar];
+        return;
+    }
     CGPoint location = [recognizer locationInView:self.cameraView];
     [[MPCameraManager shareManager] setFocusPoint:location];
     [self showFocusViewWithLocation:location];
@@ -337,7 +446,6 @@
         self.currentVideoScale = scale;
     }
 }
-
 
 - (void)startRecordVideo
 {
