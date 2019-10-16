@@ -7,6 +7,7 @@
 //
 
 #import "MPCameraManager.h"
+#import "MPFileHelper.h"
 
 static CGFloat const kMaxVideoScale = 6.0;
 static CGFloat const kMinVideoScale = 1.0;
@@ -17,7 +18,7 @@ static MPCameraManager *_cameraManager;
 @property (nonatomic, strong, readwrite) GPUImageStillCamera *camera;
 @property (nonatomic, strong, readwrite) MPFilterHandler *fileterHandler;
 @property (nonatomic, weak) GPUImageView *outputView;
-@property (nonatomic, strong) GPUImageMovieWriter *movieWrite;
+@property (nonatomic, strong) GPUImageMovieWriter *movieWriter;
 @property (nonatomic, copy) NSString *currentTmpVideoPath;
 @property (nonatomic, assign) CGSize videoSize;
 
@@ -28,7 +29,6 @@ static MPCameraManager *_cameraManager;
 // MARK: - Public
 + (MPCameraManager *)shareManager
 {
-    
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         _cameraManager = [[MPCameraManager alloc] init];
@@ -54,13 +54,21 @@ static MPCameraManager *_cameraManager;
 /// 录像
 - (void)recordVideo
 {
-    
+    [self setupMovieWriter];
+    [self.movieWriter startRecording];
 }
 
 /// 结束录制
 - (void)stopRecordVideoWithCompletion: (RecordVideoResult)completion
 {
-    
+    @weakify(self);
+    [self.movieWriter finishRecordingWithCompletionHandler:^{
+        @strongify(self);
+        [self removeMovieWriter];
+        if (completion) {
+            completion(self.currentTmpVideoPath);
+        }
+    }];
 }
 
 /// 添加图像输出控件，不会被持有
@@ -142,6 +150,19 @@ static MPCameraManager *_cameraManager;
     
 }
 
+- (void)setupMovieWriter
+{
+    NSString *videoPath = [MPFileHelper randomFilePathInTmpWithSuffix:@".m4v"];
+    NSURL *videoUrl = [NSURL fileURLWithPath:videoPath];
+    CGSize videoSize = self.videoSize;
+    
+    self.movieWriter = [[GPUImageMovieWriter alloc] initWithMovieURL:videoUrl size:videoSize];
+    GPUImageFilter *lastFilter =  self.fileterHandler.lastFilter;
+    [lastFilter addTarget:self.movieWriter];
+    self.camera.audioEncodingTarget = self.movieWriter;
+    self.currentTmpVideoPath = videoPath;
+}
+
 /// 初始化相机
 - (void)setupCamera
 {
@@ -149,6 +170,15 @@ static MPCameraManager *_cameraManager;
     self.camera.outputImageOrientation = UIInterfaceOrientationPortrait;
     self.camera.horizontallyMirrorFrontFacingCamera = YES;
     [self.camera addAudioInputsAndOutputs];
+}
+
+- (void)removeMovieWriter
+{
+    if (!self.movieWriter)
+        return;
+    [self.fileterHandler.lastFilter removeTarget:self.movieWriter];
+    self.camera.audioEncodingTarget = nil;
+    self.movieWriter = nil;
 }
 
 - (void)syncFlashState

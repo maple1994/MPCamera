@@ -12,8 +12,10 @@
 		A233DACD2354136C005BB700 /* MPCapturingButton.m in Sources */ = {isa = PBXBuildFile; fileRef = A233DACC2354136C005BB700 /* MPCapturingButton.m */; };
 		A233DAD023541756005BB700 /* MPPhotoResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A233DACF23541756005BB700 /* MPPhotoResultViewController.m */; };
 		A233DAD323544FD0005BB700 /* MPCameraTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = A233DAD223544FD0005BB700 /* MPCameraTopView.m */; };
+		A24BD7CF2356B79B00D8F4D4 /* MPFileHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A24BD7CE2356B79B00D8F4D4 /* MPFileHelper.m */; };
 		A24F614E23555D24001D3A50 /* MPCapturingModeSwitchView.m in Sources */ = {isa = PBXBuildFile; fileRef = A24F614D23555D24001D3A50 /* MPCapturingModeSwitchView.m */; };
 		A24F6151235566CE001D3A50 /* MPCamerVideoTimeLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = A24F6150235566CE001D3A50 /* MPCamerVideoTimeLabel.m */; };
+		A24F615423557583001D3A50 /* MPVideoModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A24F615323557583001D3A50 /* MPVideoModel.m */; };
 		A2536A0D23507FE90059E814 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A2536A0C23507FE90059E814 /* AppDelegate.m */; };
 		A2536A1023507FE90059E814 /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A2536A0F23507FE90059E814 /* SceneDelegate.m */; };
 		A2536A1823507FE90059E814 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A2536A1723507FE90059E814 /* Assets.xcassets */; };
@@ -66,10 +68,14 @@
 		A233DACF23541756005BB700 /* MPPhotoResultViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPPhotoResultViewController.m; sourceTree = "<group>"; };
 		A233DAD123544FD0005BB700 /* MPCameraTopView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPCameraTopView.h; sourceTree = "<group>"; };
 		A233DAD223544FD0005BB700 /* MPCameraTopView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPCameraTopView.m; sourceTree = "<group>"; };
+		A24BD7CD2356B79B00D8F4D4 /* MPFileHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPFileHelper.h; sourceTree = "<group>"; };
+		A24BD7CE2356B79B00D8F4D4 /* MPFileHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPFileHelper.m; sourceTree = "<group>"; };
 		A24F614C23555D24001D3A50 /* MPCapturingModeSwitchView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPCapturingModeSwitchView.h; sourceTree = "<group>"; };
 		A24F614D23555D24001D3A50 /* MPCapturingModeSwitchView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPCapturingModeSwitchView.m; sourceTree = "<group>"; };
 		A24F614F235566CE001D3A50 /* MPCamerVideoTimeLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPCamerVideoTimeLabel.h; sourceTree = "<group>"; };
 		A24F6150235566CE001D3A50 /* MPCamerVideoTimeLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPCamerVideoTimeLabel.m; sourceTree = "<group>"; };
+		A24F615223557583001D3A50 /* MPVideoModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPVideoModel.h; sourceTree = "<group>"; };
+		A24F615323557583001D3A50 /* MPVideoModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPVideoModel.m; sourceTree = "<group>"; };
 		A2536A0823507FE90059E814 /* MPCamera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MPCamera.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A2536A0B23507FE90059E814 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A2536A0C23507FE90059E814 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -155,6 +161,15 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		A24BD7D02356B7A600D8F4D4 /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				A24BD7CD2356B79B00D8F4D4 /* MPFileHelper.h */,
+				A24BD7CE2356B79B00D8F4D4 /* MPFileHelper.m */,
+			);
+			name = Utils;
+			sourceTree = "<group>";
+		};
 		A25369FF23507FE90059E814 = {
 			isa = PBXGroup;
 			children = (
@@ -180,6 +195,7 @@
 		A2536A0A23507FE90059E814 /* MPCamera */ = {
 			isa = PBXGroup;
 			children = (
+				A24BD7D02356B7A600D8F4D4 /* Utils */,
 				A2536A412350865E0059E814 /* Category */,
 				A2536A422350865E0059E814 /* Controller */,
 				A2536A402350865E0059E814 /* Filter */,
@@ -255,6 +271,8 @@
 				A26BCDD923517D6600395683 /* MPCameraManager.m */,
 				A26BCDEE2351A4D900395683 /* MPFilterHandler.h */,
 				A26BCDEF2351A4D900395683 /* MPFilterHandler.m */,
+				A24F615223557583001D3A50 /* MPVideoModel.h */,
+				A24F615323557583001D3A50 /* MPVideoModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -585,7 +603,9 @@
 				A26BCDE7235181B600395683 /* UIDevice+Extention.m in Sources */,
 				A233DAD023541756005BB700 /* MPPhotoResultViewController.m in Sources */,
 				A24F6151235566CE001D3A50 /* MPCamerVideoTimeLabel.m in Sources */,
+				A24BD7CF2356B79B00D8F4D4 /* MPFileHelper.m in Sources */,
 				A233DAD323544FD0005BB700 /* MPCameraTopView.m in Sources */,
+				A24F615423557583001D3A50 /* MPVideoModel.m in Sources */,
 				A2536A1023507FE90059E814 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

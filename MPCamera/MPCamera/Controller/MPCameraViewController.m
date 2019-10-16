@@ -14,6 +14,8 @@
 #import "MPCameraTopView.h"
 #import "MPCapturingModeSwitchView.h"
 #import "MPCamerVideoTimeLabel.h"
+#import "MPVideoModel.h"
+#import <Photos/Photos.h>
 
 @interface MPCameraViewController ()<
     MPCameraTopViewDelegate,
@@ -31,8 +33,8 @@
 @property (nonatomic, assign) BOOL isRecordingVideo;
 @property (nonatomic, strong) MPCamerVideoTimeLabel *videoTimeLabel;
 @property (nonatomic, strong) NSTimer *videoTimer;
-@property (nonatomic, strong) NSDate *oldDate;
 @property (nonatomic, strong) UIButton *nextButton;
+@property (nonatomic, strong) NSMutableArray<MPVideoModel *>*videos;
 
 @end
 
@@ -41,6 +43,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     [self setupUI];
+    self.videos = [NSMutableArray array];
     [CSToastManager setDefaultPosition:CSToastPositionCenter];
     [CSToastManager setDefaultDuration:1];
     [[MPCameraManager shareManager] addOutputView:self.cameraView];
@@ -307,7 +310,18 @@
 
 - (void)nextAction
 {
-    
+    NSURL *url =  [NSURL fileURLWithPath:self.videos.firstObject.filePath];
+    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
+        [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:url];
+    } completionHandler:^(BOOL success, NSError * _Nullable error) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (success) {
+                [self.view.window makeToast:@"保存成功"];
+            }else {
+                [self.view.window makeToast:@"保存失败"];
+            }
+        });
+    }];
 }
 
 - (void)tapAction: (UITapGestureRecognizer *)recognizer
@@ -333,10 +347,11 @@
     if (self.isRecordingVideo)
         return;
     self.isRecordingVideo = YES;
+    [[MPCameraManager shareManager] recordVideo];
     self.capturingButton.capturingState = MPCapturingModeSwitchTypeVideo;
     [self refreshUIWhenRecordVideo];
     [self.topView.closeButton setHidden:YES animated:YES completion:nil];
-    self.oldDate = [NSDate date];
+    [self.videoTimeLabel setHidden:NO animated:YES completion:nil];
     [self startVideoTimer];
 }
 
@@ -345,19 +360,32 @@
     if (!self.isRecordingVideo) {
         return;
     }
-    self.isRecordingVideo = NO;
-    self.capturingButton.capturingState = MPCapturingModeSwitchTypeImage;
-    [self.topView.closeButton setHidden:NO animated:YES completion:nil];
-    [self.nextButton setHidden:NO animated:YES completion:nil];
-    [self endVideoTimer];
+    self.capturingButton.capturingState = MPCapturingButtonStateNormal;
+    @weakify(self);
+    [[MPCameraManager shareManager] stopRecordVideoWithCompletion:^(NSString *videoPath) {
+        @strongify(self);
+        self.isRecordingVideo = NO;
+        [self endVideoTimer];
+        AVURLAsset *asset = [AVURLAsset assetWithURL:[NSURL fileURLWithPath:videoPath]];
+        MPVideoModel *model = [[MPVideoModel alloc] init];
+        model.filePath = videoPath;
+        model.asset = asset;
+        [self.videos addObject:model];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.topView.closeButton setHidden:NO animated:YES completion:nil];
+            [self.nextButton setHidden:NO animated:YES completion:nil];
+        });
+    }];
 }
 
 - (void)timerAction
 {
-    NSDate *current = [NSDate date];
-    NSInteger timestamp = (NSInteger)[current timeIntervalSinceDate:self.oldDate];
+    CMTime savedTime = kCMTimeZero;
+    for (MPVideoModel *model in self.videos) {
+        savedTime = CMTimeAdd(savedTime, model.asset.duration);
+    }
+    NSInteger timestamp = round(CMTimeGetSeconds(savedTime) + [MPCameraManager shareManager].currentDuration);
     self.videoTimeLabel.timestamp = timestamp;
-    [self.videoTimeLabel setHidden:NO animated:YES completion:nil];
 }
 
 - (void)startVideoTimer
@@ -406,6 +434,7 @@
     self.isRecordingVideo = NO;
     [self refreshUIWhenRecordVideo];
     self.videoTimeLabel.alpha = 0;
+    [self.videos removeAllObjects];
 }
 
 // MARK: - MPCapturingModeSwitchViewDelegate
