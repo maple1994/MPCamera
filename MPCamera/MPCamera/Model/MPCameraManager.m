@@ -123,7 +123,8 @@ static MPCameraManager *_cameraManager;
 /// 正在录制中的视频时长
 - (NSTimeInterval)currentDuration
 {
-    return 0;
+    NSTimeInterval time = CMTimeGetSeconds(self.movieWriter.duration);
+    return time;
 }
 
 // MARK: - Private

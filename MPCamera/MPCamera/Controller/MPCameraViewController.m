@@ -15,7 +15,7 @@
 #import "MPCapturingModeSwitchView.h"
 #import "MPCamerVideoTimeLabel.h"
 #import "MPVideoModel.h"
-#import <Photos/Photos.h>
+#import "MPVideoResultViewController.h"
 
 @interface MPCameraViewController ()<
     MPCameraTopViewDelegate,
@@ -310,18 +310,15 @@
 
 - (void)nextAction
 {
-    NSURL *url =  [NSURL fileURLWithPath:self.videos.firstObject.filePath];
-    [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
-        [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:url];
-    } completionHandler:^(BOOL success, NSError * _Nullable error) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (success) {
-                [self.view.window makeToast:@"保存成功"];
-            }else {
-                [self.view.window makeToast:@"保存失败"];
-            }
-        });
-    }];
+    MPVideoResultViewController *vc = [[MPVideoResultViewController alloc] init];
+    vc.videos = self.videos;
+    [self.videos removeAllObjects];
+    [self.navigationController pushViewController:vc animated:YES];
+    
+    [self.topView.closeButton setHidden:YES animated:YES completion:nil];
+    self.isRecordingVideo = NO;
+    [self refreshUIWhenRecordVideo];
+    self.videoTimeLabel.alpha = 0;
 }
 
 - (void)tapAction: (UITapGestureRecognizer *)recognizer
