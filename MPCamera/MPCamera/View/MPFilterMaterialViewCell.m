@@ -8,6 +8,9 @@
 
 #import "MPFilterMaterialViewCell.h"
 #import <GPUImage.h>
+#import "MPFilterMaterialModel.h"
+#import "MPFilterManager.h"
+#import "MPGPUUIImageBaseFilter.h"
 
 @interface MPFilterMaterialViewCell ()
 
@@ -74,9 +77,17 @@
     [self.selectView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.imageView);
     }];
-    
-    self.titleLabel.text = @"素描";
-    GPUImageFilter *filter = [[GPUImageFilter alloc] init];
+}
+
+- (void)setMaterialModel:(MPFilterMaterialModel *)materialModel
+{
+    _materialModel = materialModel;
+    self.titleLabel.text = materialModel.filterName;
+    GPUImageFilter *filter = [[MPFilterManager shareManager] filterWithFilterID:materialModel.filterID];
+    if ([filter isKindOfClass:[MPGPUUIImageBaseFilter class]]) {
+        ((MPGPUUIImageBaseFilter *)filter).time = 0.2f;
+    }
+    [self.picture removeAllTargets];
     [self.picture addTarget:filter];
     [filter addTarget:self.imageView];
     if (!self.superview) {
@@ -86,7 +97,6 @@
     }else {
         [self.picture processImage];
     }
-    
 }
 
 - (void)setIsSelect:(BOOL)isSelect {

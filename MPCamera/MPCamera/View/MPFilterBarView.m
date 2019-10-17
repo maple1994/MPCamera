@@ -9,10 +9,11 @@
 #import "MPFilterBarView.h"
 #import "MPFilterCategoryView.h"
 #import "MPFilterMaterialView.h"
+#import "MPFilterManager.h"
 
 static CGFloat const kFilterMatrialViewHeight = 100.0f;
 
-@interface MPFilterBarView ()
+@interface MPFilterBarView ()<MPFilterCategoryViewDelegate>
 
 @property (nonatomic, strong) MPFilterMaterialView *filterMaterialView;
 @property (nonatomic, strong) MPFilterCategoryView *filterCategoryView;
@@ -34,6 +35,7 @@ static CGFloat const kFilterMatrialViewHeight = 100.0f;
 {
     self.backgroundColor = RGBA(0, 0, 0, 0.5);
     self.filterMaterialView = [[MPFilterMaterialView alloc] init];
+    self.filterMaterialView.filterList = [MPFilterManager shareManager].defaultFilters;
     self.filterCategoryView = ({
         MPFilterCategoryView *view = [[MPFilterCategoryView alloc] init];
         view.itemNormalColor = [UIColor whiteColor];
@@ -42,6 +44,7 @@ static CGFloat const kFilterMatrialViewHeight = 100.0f;
         view.itemFont = [UIFont systemFontOfSize:14];
         view.itemWidth = 65;
         view.bottomLineWidth = 30;
+        view.delegate = self;
         view;
     });
     self.beautifySwitch = [[UISwitch alloc] init];
@@ -103,6 +106,16 @@ static CGFloat const kFilterMatrialViewHeight = 100.0f;
 - (void)beautifySliderValueChanged: (UISlider *)slider
 {
     
+}
+
+// MARK: - MPFilterCategoryViewDelegate
+- (void)filterCategory:(MPFilterCategoryView *)categoryView didScrollToIndex:(NSInteger)index
+{
+    if (index == 0) {
+        self.filterMaterialView.filterList = [MPFilterManager shareManager].defaultFilters;
+    }else {
+        self.filterMaterialView.filterList = [MPFilterManager shareManager].defineFilters;
+    }
 }
 
 @end

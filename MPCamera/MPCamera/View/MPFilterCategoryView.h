@@ -10,6 +10,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class MPFilterCategoryView;
+
+@protocol MPFilterCategoryViewDelegate <NSObject>
+
+- (void)filterCategory: (MPFilterCategoryView *)categoryView didScrollToIndex: (NSInteger)index;
+
+@end
+
 /// 选择内置滤镜或自定义滤镜的View
 @interface MPFilterCategoryView : UIView
 
@@ -21,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) CGFloat bottomLineHeight;
 @property (nonatomic, assign, readonly) NSInteger currentIndex;
 @property (nonatomic, strong) NSArray <NSString *> *itemList;
+@property (nonatomic, weak) id<MPFilterCategoryViewDelegate> delegate;
 
 - (void)scrollToIndex:(NSUInteger)index;
 

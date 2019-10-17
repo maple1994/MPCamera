@@ -133,9 +133,9 @@ static NSString * const kFilterCategoryReuseIdentifier = @"kFilterCategoryReuseI
     
     [_collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
     
-//    if ([self.delegate respondsToSelector:@selector(filterCategoryView:didScrollToIndex:)]) {
-//        [self.delegate filterCategoryView:self didScrollToIndex:_currentIndex];
-//    }
+    if ([self.delegate respondsToSelector:@selector(filterCategory:didScrollToIndex:)]) {
+        [self.delegate filterCategory:self didScrollToIndex:_currentIndex];
+    }
 }
 
 

@@ -7,11 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MPFilterMaterialModel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 /// 选择滤镜的View
 @interface MPFilterMaterialView : UIView
+
+@property (nonatomic, strong) NSArray<MPFilterMaterialModel *> *filterList;
 
 @end
 

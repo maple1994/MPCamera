@@ -16,6 +16,7 @@ static NSString * const kCCFilterMaterialViewReuseIdentifier = @"CCFilterMateria
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) UICollectionViewFlowLayout *collectionViewLayout;
 @property (nonatomic, assign) NSInteger currentIndex;
+@property (nonatomic, strong) MPFilterMaterialModel *selectMaterialModel;
 
 @end
 
@@ -75,20 +76,20 @@ static NSString * const kCCFilterMaterialViewReuseIdentifier = @"CCFilterMateria
     currentSelectCell.isSelect = YES;
     
     self.currentIndex = indexPath.row;
-//    self.selectMaterialModel = self.itemList[self.currentIndex];
+    self.selectMaterialModel = self.filterList[self.currentIndex];
 
     [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
 }
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 10;
+    return self.filterList.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     MPFilterMaterialViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCCFilterMaterialViewReuseIdentifier forIndexPath:indexPath];
-//    cell.filterMaterialModel = self.itemList[indexPath.row];
-//    cell.isSelect = cell.filterMaterialModel == self.selectMaterialModel;
+    cell.materialModel = self.filterList[indexPath.row];
+    cell.isSelect = cell.materialModel == self.selectMaterialModel;
     
     return cell;
 }
@@ -96,6 +97,12 @@ static NSString * const kCCFilterMaterialViewReuseIdentifier = @"CCFilterMateria
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     [self selectIndex:indexPath];
+}
+
+- (void)setFilterList:(NSArray<MPFilterMaterialModel *> *)filterList
+{
+    _filterList = filterList;
+    [self.collectionView reloadData];
 }
 
 @end
