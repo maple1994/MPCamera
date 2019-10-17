@@ -239,7 +239,7 @@ static MPCameraManager *_cameraManager;
             videoHeight = videoWidth / 9.0 * 16.0;
             break;
         case MPCameraRatioFull:
-            videoHeight = SCREEN_HEIGHT / SCREEN_SCALE;
+            videoHeight = SCREEN_HEIGHT * SCREEN_SCALE;
             break;
         default:
             break;

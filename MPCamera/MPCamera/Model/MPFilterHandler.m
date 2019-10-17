@@ -12,6 +12,7 @@
 
 @interface MPFilterHandler ()
 
+/// 滤镜链：source(GPUImageOutput)，这里是GPUImageStillCamera -> cropFilter -> beatuityFilter -> 自定义滤镜 -> GPUImageView(GPUImageInpu)
 @property (nonatomic, strong) NSMutableArray<GPUImageFilter *> *filters;
 @property (nonatomic, strong) GPUImageCropFilter *currentCropFilter;
 @property (nonatomic, weak) GPUImageFilter *currentBeautifyFilter;
@@ -33,8 +34,11 @@
     if (!self.currentEffectFilter) {
         [self addFilter:filter];
     }else {
+        // 找到当前滤镜的数组索引
         NSInteger index = [self.filters indexOfObject:self.currentEffectFilter];
+        // 获取滤镜链的source
         GPUImageOutput *source = index == 0 ? self.source : self.filters[index - 1];
+        // 将当前滤镜的输入，转移到新的滤镜中
         for (id<GPUImageInput> input in self.currentEffectFilter.targets) {
             [filter addTarget:input];
         }
@@ -45,6 +49,7 @@
     }
     self.currentEffectFilter = filter;
     if ([self.currentEffectFilter isKindOfClass:[MPGPUImageBaseFilter class]]) {
+        // 传递开始时间，用于滤镜动画，例如灵魂出窍
          MPGPUImageBaseFilter *filter = (MPGPUImageBaseFilter *)self.currentEffectFilter;
         filter.beginTime = self.displayLink.timestamp;
     }
@@ -58,8 +63,10 @@
 
 - (void)addFilter: (GPUImageFilter *)filter
 {
+    // 上一个filter转移input到新的filter中
     NSArray *targets = self.filters.lastObject.targets;
     [self.filters.lastObject removeAllTargets];
+    // 新的filter作为上一个filter的输入
     [self.filters.lastObject addTarget:filter];
     for (id<GPUImageInput> input in targets) {
         [filter addTarget:input];
