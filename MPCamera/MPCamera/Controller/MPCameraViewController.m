@@ -531,12 +531,12 @@ completion:(void (^)(void))completion {
 
 - (void)filterBarView:(MPFilterBarView *)filterBarView beautifySwitchIsOn:(BOOL)isOn
 {
-    
+    [MPCameraManager shareManager].fileterHandler.beatuifyFilterEnable = isOn;
 }
 
 - (void)filterBarView:(MPFilterBarView *)filterBarView beautifySliderChangeValue:(CGFloat)value
 {
-    
+    [MPCameraManager shareManager].fileterHandler.beatuifyFilterDegree = value;
 }
 
 // MARK: - MPCameraTopViewDelegate
