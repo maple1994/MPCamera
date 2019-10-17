@@ -9,11 +9,10 @@
 #import "MPFilterBarView.h"
 #import "MPFilterCategoryView.h"
 #import "MPFilterMaterialView.h"
-#import "MPFilterManager.h"
 
 static CGFloat const kFilterMatrialViewHeight = 100.0f;
 
-@interface MPFilterBarView ()<MPFilterCategoryViewDelegate>
+@interface MPFilterBarView ()<MPFilterCategoryViewDelegate, MPFilterMaterialViewDelegate>
 
 @property (nonatomic, strong) MPFilterMaterialView *filterMaterialView;
 @property (nonatomic, strong) MPFilterCategoryView *filterCategoryView;
@@ -35,7 +34,7 @@ static CGFloat const kFilterMatrialViewHeight = 100.0f;
 {
     self.backgroundColor = RGBA(0, 0, 0, 0.5);
     self.filterMaterialView = [[MPFilterMaterialView alloc] init];
-    self.filterMaterialView.filterList = [MPFilterManager shareManager].defaultFilters;
+    self.filterMaterialView.delegate = self;
     self.filterCategoryView = ({
         MPFilterCategoryView *view = [[MPFilterCategoryView alloc] init];
         view.itemNormalColor = [UIColor whiteColor];
@@ -101,20 +100,57 @@ static CGFloat const kFilterMatrialViewHeight = 100.0f;
 - (void)beautifySwitchValueChanged: (UISwitch *)sender
 {
     [self.beautifySlider setHidden:!sender.isOn animated:YES completion:nil];
+    if ([self.delegate respondsToSelector:@selector(filterBarView:beautifySwitchIsOn:)]) {
+        [self.delegate filterBarView:self beautifySwitchIsOn:sender.isOn];
+    }
 }
 
 - (void)beautifySliderValueChanged: (UISlider *)slider
 {
-    
+    if ([self.delegate respondsToSelector:@selector(filterBarView:beautifySliderChangeValue:)]) {
+        [self.delegate filterBarView:self beautifySliderChangeValue:slider.value];
+    }
 }
 
 // MARK: - MPFilterCategoryViewDelegate
 - (void)filterCategory:(MPFilterCategoryView *)categoryView didScrollToIndex:(NSInteger)index
 {
     if (index == 0) {
-        self.filterMaterialView.filterList = [MPFilterManager shareManager].defaultFilters;
+        self.filterMaterialView.filterList = self.defaultFilters;
     }else {
-        self.filterMaterialView.filterList = [MPFilterManager shareManager].defineFilters;
+        self.filterMaterialView.filterList = self.defineFilters;
+    }
+    if ([self.delegate respondsToSelector:@selector(filterBarView:categoryDidScrollToIndex:)]) {
+        [self.delegate filterBarView:self categoryDidScrollToIndex:index];
+    }
+}
+
+// MARK: - MPFilterMaterialViewDelegate
+- (void)filterMaterialView:(MPFilterMaterialView *)materialView didScrollToIndex:(NSUInteger)index
+{
+    if ([self.delegate respondsToSelector:@selector(filterBarView:materiaDidScrollToIndex:)]) {
+        [self.delegate filterBarView:self materiaDidScrollToIndex:index];
+    }
+}
+
+- (NSInteger)currentCategoryIndex
+{
+    return self.filterCategoryView.currentIndex;
+}
+
+- (void)setDefaultFilters:(NSArray<MPFilterMaterialModel *> * _Nonnull)defaultFilters
+{
+    _defaultFilters = [defaultFilters copy];
+    if (self.filterCategoryView.currentIndex == 0) {
+        self.filterMaterialView.filterList = defaultFilters;
+    }
+}
+
+- (void)setDefineFilters:(NSArray<MPFilterMaterialModel *> *)defineFilters
+{
+    _defineFilters = [defineFilters copy];
+    if (self.filterCategoryView.currentIndex == 1) {
+        self.filterMaterialView.filterList = defineFilters;
     }
 }
 

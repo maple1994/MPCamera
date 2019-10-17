@@ -17,12 +17,14 @@
 #import "MPVideoModel.h"
 #import "MPVideoResultViewController.h"
 #import "MPFilterBarView.h"
+#import "MPFilterManager.h"
 
 static CGFloat const kFilterBarViewHeight = 200.0f;  // 滤镜栏高度
 
 @interface MPCameraViewController ()<
     MPCameraTopViewDelegate,
-    MPCapturingModeSwitchViewDelegate>
+    MPCapturingModeSwitchViewDelegate,
+    MPFilterBarViewDelegate>
 
 @property (nonatomic, strong) GPUImageView *cameraView;
 @property (nonatomic, strong) MPCapturingButton *capturingButton;
@@ -111,6 +113,7 @@ static CGFloat const kFilterBarViewHeight = 200.0f;  // 滤镜栏高度
     });
     self.filterBarView = ({
         MPFilterBarView *view = [[MPFilterBarView alloc] init];
+        view.delegate = self;
         view;
     });
     self.videoTimeLabel = [[MPCamerVideoTimeLabel alloc] init];
@@ -411,6 +414,11 @@ completion:(void (^)(void))completion {
 {
     [self setFilterBarViewHidden:NO animated:YES completion:nil];
     [self refreshUIWhenFilterBarShowOrHide];
+    // 初始化赋值
+    if (!self.filterBarView.defaultFilters) {
+        self.filterBarView.defineFilters = [MPFilterManager shareManager].defineFilters;
+        self.filterBarView.defaultFilters = [MPFilterManager shareManager].defaultFilters;
+    }
 }
 
 - (void)nextAction
@@ -502,6 +510,26 @@ completion:(void (^)(void))completion {
 {
     [self.videoTimer invalidate];
     self.videoTimer = nil;
+}
+
+// MARK: - MPFilterBarViewDelegate
+- (void)filterBarView:(MPFilterBarView *)filterBarView categoryDidScrollToIndex:(NSInteger)index
+{
+}
+
+- (void)filterBarView:(MPFilterBarView *)filterBarView materiaDidScrollToIndex:(NSInteger)index
+{
+    
+}
+
+- (void)filterBarView:(MPFilterBarView *)filterBarView beautifySwitchIsOn:(BOOL)isOn
+{
+    
+}
+
+- (void)filterBarView:(MPFilterBarView *)filterBarView beautifySliderChangeValue:(CGFloat)value
+{
+    
 }
 
 // MARK: - MPCameraTopViewDelegate

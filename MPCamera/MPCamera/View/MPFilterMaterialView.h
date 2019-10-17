@@ -11,10 +11,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class MPFilterMaterialView;
+
+@protocol MPFilterMaterialViewDelegate <NSObject>
+
+- (void)filterMaterialView: (MPFilterMaterialView *)materialView didScrollToIndex: (NSUInteger)index;
+
+@end
+
 /// 选择滤镜的View
 @interface MPFilterMaterialView : UIView
 
 @property (nonatomic, strong) NSArray<MPFilterMaterialModel *> *filterList;
+@property (nonatomic, weak) id<MPFilterMaterialViewDelegate> delegate;
 
 @end
 

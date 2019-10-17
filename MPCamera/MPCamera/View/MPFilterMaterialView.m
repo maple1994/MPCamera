@@ -79,6 +79,9 @@ static NSString * const kCCFilterMaterialViewReuseIdentifier = @"CCFilterMateria
     self.selectMaterialModel = self.filterList[self.currentIndex];
 
     [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+    if ([self.delegate respondsToSelector:@selector(filterMaterialView:didScrollToIndex:)]) {
+        [self.delegate filterMaterialView:self didScrollToIndex:self.currentIndex];
+    }
 }
 
 // MARK: - UICollectionViewDelegate, UICollectionViewDataSource
@@ -103,6 +106,12 @@ static NSString * const kCCFilterMaterialViewReuseIdentifier = @"CCFilterMateria
 {
     _filterList = filterList;
     [self.collectionView reloadData];
+    if ([filterList containsObject:self.selectMaterialModel]) {
+        NSInteger index = [filterList indexOfObject:self.selectMaterialModel];
+        [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:index inSection:0] atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    }else {
+        [self.collectionView setContentOffset:CGPointMake(0, 0) animated:YES];
+    }
 }
 
 @end
