@@ -142,13 +142,13 @@ static MPCameraManager *_cameraManager;
     self.flashMode = MPCameraFlashModeOff;
     self.ratio = MPCameraRatio16v9;
     self.videoSize = [self videoSizeWithRatio:self.ratio];
-    self.fileterHandler = [[MPFilterHandler alloc] init];
     [self setupFilterHandler];
 }
 
 - (void)setupFilterHandler
 {
-    
+    self.fileterHandler = [[MPFilterHandler alloc] init];
+    [self.fileterHandler setEffectFilter:nil];
 }
 
 - (void)setupMovieWriter

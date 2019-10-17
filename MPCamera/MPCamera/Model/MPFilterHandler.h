@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setCropRect: (CGRect)cropRect;
 - (void)addFilter: (GPUImageFilter *)filter;
 /// 设置效果滤镜
-- (void)setEffectFilter: (GPUImageFilter *)filter;
+- (void)setEffectFilter: (nullable GPUImageFilter *)filter;
 
 @end
 

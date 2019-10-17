@@ -519,7 +519,14 @@ completion:(void (^)(void))completion {
 
 - (void)filterBarView:(MPFilterBarView *)filterBarView materiaDidScrollToIndex:(NSInteger)index
 {
-    
+    NSArray *models = nil;
+    if (self.filterBarView.currentCategoryIndex == 0) {
+        models = [MPFilterManager shareManager].defaultFilters;
+    }else {
+        models = [MPFilterManager shareManager].defineFilters;
+    }
+    MPFilterMaterialModel *model = models[index];
+    [[MPCameraManager shareManager].fileterHandler setEffectFilter:[[MPFilterManager shareManager] filterWithFilterID:model.filterID]];
 }
 
 - (void)filterBarView:(MPFilterBarView *)filterBarView beautifySwitchIsOn:(BOOL)isOn
