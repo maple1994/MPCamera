@@ -6,8 +6,8 @@
 //  Copyright © 2019年 CC老师. All rights reserved.
 //
 
-#import "MPGPUUIImageBaseFilter.h"
+#import "MPGPUImageBaseFilter.h"
 
-@interface CCGPUImageCirlceFilter : MPGPUUIImageBaseFilter
+@interface CCGPUImageCirlceFilter : MPGPUImageBaseFilter
 
 @end

@@ -7,7 +7,7 @@
 //
 
 #import "MPFilterHandler.h"
-#import "MPGPUUIImageBaseFilter.h"
+#import "MPGPUImageBaseFilter.h"
 #import "LFGPUImageBeautyFilter.h"
 
 @interface MPFilterHandler ()
@@ -44,8 +44,8 @@
         self.filters[index] = filter;
     }
     self.currentEffectFilter = filter;
-    if ([self.currentEffectFilter isKindOfClass:[MPGPUUIImageBaseFilter class]]) {
-         MPGPUUIImageBaseFilter *filter = (MPGPUUIImageBaseFilter *)self.currentEffectFilter;
+    if ([self.currentEffectFilter isKindOfClass:[MPGPUImageBaseFilter class]]) {
+         MPGPUImageBaseFilter *filter = (MPGPUImageBaseFilter *)self.currentEffectFilter;
         filter.beginTime = self.displayLink.timestamp;
     }
 }
@@ -159,8 +159,8 @@
 
 - (void)displayAction
 {
-    if ([self.currentEffectFilter isKindOfClass:[MPGPUUIImageBaseFilter class]]) {
-        MPGPUUIImageBaseFilter *filter = (MPGPUUIImageBaseFilter *)self.currentEffectFilter;
+    if ([self.currentEffectFilter isKindOfClass:[MPGPUImageBaseFilter class]]) {
+        MPGPUImageBaseFilter *filter = (MPGPUImageBaseFilter *)self.currentEffectFilter;
         filter.time = self.displayLink.timestamp - filter.beginTime;
     }
 }

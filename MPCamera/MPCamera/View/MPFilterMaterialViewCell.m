@@ -10,7 +10,7 @@
 #import <GPUImage.h>
 #import "MPFilterMaterialModel.h"
 #import "MPFilterManager.h"
-#import "MPGPUUIImageBaseFilter.h"
+#import "MPGPUImageBaseFilter.h"
 
 @interface MPFilterMaterialViewCell ()
 
@@ -84,8 +84,8 @@
     _materialModel = materialModel;
     self.titleLabel.text = materialModel.filterName;
     GPUImageFilter *filter = [[MPFilterManager shareManager] filterWithFilterID:materialModel.filterID];
-    if ([filter isKindOfClass:[MPGPUUIImageBaseFilter class]]) {
-        ((MPGPUUIImageBaseFilter *)filter).time = 0.2f;
+    if ([filter isKindOfClass:[MPGPUImageBaseFilter class]]) {
+        ((MPGPUImageBaseFilter *)filter).time = 0.2f;
     }
     [self.picture removeAllTargets];
     [self.picture addTarget:filter];

@@ -6,9 +6,9 @@
 //  Copyright © 2019 Beauty-ruanjian. All rights reserved.
 //
 
-#import "MPGPUUIImageBaseFilter.h"
+#import "MPGPUImageBaseFilter.h"
 
-@implementation MPGPUUIImageBaseFilter
+@implementation MPGPUImageBaseFilter
 
 - (id)initWithVertexShaderFromString:(NSString *)vertexShaderString
             fragmentShaderFromString:(NSString *)fragmentShaderString {

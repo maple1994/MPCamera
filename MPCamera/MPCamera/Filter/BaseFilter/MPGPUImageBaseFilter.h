@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface MPGPUUIImageBaseFilter : GPUImageFilter
+@interface MPGPUImageBaseFilter : GPUImageFilter
 
 @property (nonatomic, assign) GLint timeUniform;
 @property (nonatomic, assign) GLfloat time;

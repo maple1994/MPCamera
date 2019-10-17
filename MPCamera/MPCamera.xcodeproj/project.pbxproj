@@ -37,7 +37,7 @@
 		A26BCDF02351A4D900395683 /* MPFilterHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A26BCDEF2351A4D900395683 /* MPFilterHandler.m */; };
 		A272DC99235803D400E7DB9A /* MPFilterMaterialModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A272DC98235803D400E7DB9A /* MPFilterMaterialModel.m */; };
 		A272DC9C23580EC300E7DB9A /* MPFilterManager.m in Sources */ = {isa = PBXBuildFile; fileRef = A272DC9B23580EC300E7DB9A /* MPFilterManager.m */; };
-		A272DCA123581D8F00E7DB9A /* MPGPUUIImageBaseFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = A272DCA023581D8F00E7DB9A /* MPGPUUIImageBaseFilter.m */; };
+		A272DCA123581D8F00E7DB9A /* MPGPUImageBaseFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = A272DCA023581D8F00E7DB9A /* MPGPUImageBaseFilter.m */; };
 		A272DCC623581E8F00E7DB9A /* CCGPUImageSplitScreen6Filter.m in Sources */ = {isa = PBXBuildFile; fileRef = A272DCA223581E8C00E7DB9A /* CCGPUImageSplitScreen6Filter.m */; };
 		A272DCC723581E8F00E7DB9A /* CCGPUImageScaleFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = A272DCA523581E8D00E7DB9A /* CCGPUImageScaleFilter.m */; };
 		A272DCC823581E8F00E7DB9A /* CCGPUImageReversalFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = A272DCA623581E8D00E7DB9A /* CCGPUImageReversalFilter.m */; };
@@ -148,8 +148,8 @@
 		A272DC98235803D400E7DB9A /* MPFilterMaterialModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPFilterMaterialModel.m; sourceTree = "<group>"; };
 		A272DC9A23580EC300E7DB9A /* MPFilterManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPFilterManager.h; sourceTree = "<group>"; };
 		A272DC9B23580EC300E7DB9A /* MPFilterManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPFilterManager.m; sourceTree = "<group>"; };
-		A272DC9F23581D8F00E7DB9A /* MPGPUUIImageBaseFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPGPUUIImageBaseFilter.h; sourceTree = "<group>"; };
-		A272DCA023581D8F00E7DB9A /* MPGPUUIImageBaseFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPGPUUIImageBaseFilter.m; sourceTree = "<group>"; };
+		A272DC9F23581D8F00E7DB9A /* MPGPUImageBaseFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPGPUImageBaseFilter.h; sourceTree = "<group>"; };
+		A272DCA023581D8F00E7DB9A /* MPGPUImageBaseFilter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPGPUImageBaseFilter.m; sourceTree = "<group>"; };
 		A272DCA223581E8C00E7DB9A /* CCGPUImageSplitScreen6Filter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCGPUImageSplitScreen6Filter.m; sourceTree = "<group>"; };
 		A272DCA323581E8C00E7DB9A /* CCGPUImageHexagonMosaicFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCGPUImageHexagonMosaicFilter.h; sourceTree = "<group>"; };
 		A272DCA423581E8D00E7DB9A /* CCGPUImageShakeFilter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CCGPUImageShakeFilter.h; sourceTree = "<group>"; };
@@ -454,8 +454,8 @@
 		A272DC9D23581D6D00E7DB9A /* BaseFilter */ = {
 			isa = PBXGroup;
 			children = (
-				A272DC9F23581D8F00E7DB9A /* MPGPUUIImageBaseFilter.h */,
-				A272DCA023581D8F00E7DB9A /* MPGPUUIImageBaseFilter.m */,
+				A272DC9F23581D8F00E7DB9A /* MPGPUImageBaseFilter.h */,
+				A272DCA023581D8F00E7DB9A /* MPGPUImageBaseFilter.m */,
 			);
 			path = BaseFilter;
 			sourceTree = "<group>";
@@ -805,7 +805,7 @@
 				A24BD7CF2356B79B00D8F4D4 /* MPFileHelper.m in Sources */,
 				A272DCD423581E8F00E7DB9A /* CCGPUImageShakeFilter.m in Sources */,
 				A272DCC623581E8F00E7DB9A /* CCGPUImageSplitScreen6Filter.m in Sources */,
-				A272DCA123581D8F00E7DB9A /* MPGPUUIImageBaseFilter.m in Sources */,
+				A272DCA123581D8F00E7DB9A /* MPGPUImageBaseFilter.m in Sources */,
 				A272DCD123581E8F00E7DB9A /* CCGPUImageSoulOutFilter.m in Sources */,
 				A233DAD323544FD0005BB700 /* MPCameraTopView.m in Sources */,
 				A2A202A22357233C00EAAC06 /* MPFilterMaterialView.m in Sources */,
