@@ -35,11 +35,14 @@
 		A26BCDEA235181B600395683 /* UIView+Extention.m in Sources */ = {isa = PBXBuildFile; fileRef = A26BCDE6235181B600395683 /* UIView+Extention.m */; };
 		A26BCDED2351829F00395683 /* CCGPUImageMovieWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = A26BCDEC2351829F00395683 /* CCGPUImageMovieWriter.m */; };
 		A26BCDF02351A4D900395683 /* MPFilterHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = A26BCDEF2351A4D900395683 /* MPFilterHandler.m */; };
+		A272DC99235803D400E7DB9A /* MPFilterMaterialModel.m in Sources */ = {isa = PBXBuildFile; fileRef = A272DC98235803D400E7DB9A /* MPFilterMaterialModel.m */; };
 		A2A202962356E95100EAAC06 /* MPVideoResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = A2A202952356E95100EAAC06 /* MPVideoResultViewController.m */; };
 		A2A202992356EA1100EAAC06 /* MPAssetHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = A2A202982356EA1100EAAC06 /* MPAssetHelper.m */; };
 		A2A2029C23571FCB00EAAC06 /* MPFilterBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2A2029B23571FCB00EAAC06 /* MPFilterBarView.m */; };
 		A2A2029F2357231C00EAAC06 /* MPFilterCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2A2029E2357231C00EAAC06 /* MPFilterCategoryView.m */; };
 		A2A202A22357233C00EAAC06 /* MPFilterMaterialView.m in Sources */ = {isa = PBXBuildFile; fileRef = A2A202A12357233C00EAAC06 /* MPFilterMaterialView.m */; };
+		A2A202A523572AB200EAAC06 /* MPFilterCategoryCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A2A202A423572AB200EAAC06 /* MPFilterCategoryCell.m */; };
+		A2A202A823572AEF00EAAC06 /* MPFilterMaterialViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = A2A202A723572AEF00EAAC06 /* MPFilterMaterialViewCell.m */; };
 		FE3C203913EED8050F6E48FA /* libPods-MPCameraUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BF2B660C99F9EEBD087350F /* libPods-MPCameraUITests.a */; };
 /* End PBXBuildFile section */
 
@@ -120,6 +123,8 @@
 		A26BCDEC2351829F00395683 /* CCGPUImageMovieWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CCGPUImageMovieWriter.m; sourceTree = "<group>"; };
 		A26BCDEE2351A4D900395683 /* MPFilterHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPFilterHandler.h; sourceTree = "<group>"; };
 		A26BCDEF2351A4D900395683 /* MPFilterHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPFilterHandler.m; sourceTree = "<group>"; };
+		A272DC97235803D400E7DB9A /* MPFilterMaterialModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPFilterMaterialModel.h; sourceTree = "<group>"; };
+		A272DC98235803D400E7DB9A /* MPFilterMaterialModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPFilterMaterialModel.m; sourceTree = "<group>"; };
 		A2A202942356E95100EAAC06 /* MPVideoResultViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPVideoResultViewController.h; sourceTree = "<group>"; };
 		A2A202952356E95100EAAC06 /* MPVideoResultViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPVideoResultViewController.m; sourceTree = "<group>"; };
 		A2A202972356EA1100EAAC06 /* MPAssetHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPAssetHelper.h; sourceTree = "<group>"; };
@@ -130,6 +135,10 @@
 		A2A2029E2357231C00EAAC06 /* MPFilterCategoryView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPFilterCategoryView.m; sourceTree = "<group>"; };
 		A2A202A02357233C00EAAC06 /* MPFilterMaterialView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPFilterMaterialView.h; sourceTree = "<group>"; };
 		A2A202A12357233C00EAAC06 /* MPFilterMaterialView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPFilterMaterialView.m; sourceTree = "<group>"; };
+		A2A202A323572AB200EAAC06 /* MPFilterCategoryCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPFilterCategoryCell.h; sourceTree = "<group>"; };
+		A2A202A423572AB200EAAC06 /* MPFilterCategoryCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPFilterCategoryCell.m; sourceTree = "<group>"; };
+		A2A202A623572AEF00EAAC06 /* MPFilterMaterialViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MPFilterMaterialViewCell.h; sourceTree = "<group>"; };
+		A2A202A723572AEF00EAAC06 /* MPFilterMaterialViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MPFilterMaterialViewCell.m; sourceTree = "<group>"; };
 		AAB953234B5EAF795ABCFAD8 /* Pods-MPCameraTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MPCameraTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MPCameraTests/Pods-MPCameraTests.debug.xcconfig"; sourceTree = "<group>"; };
 		C4733666AE08CD73641E8CA1 /* Pods-MPCamera.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MPCamera.release.xcconfig"; path = "Pods/Target Support Files/Pods-MPCamera/Pods-MPCamera.release.xcconfig"; sourceTree = "<group>"; };
 		E6AE1D869C71CC8F2C778EF4 /* Pods-MPCameraTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MPCameraTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-MPCameraTests/Pods-MPCameraTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -292,6 +301,8 @@
 				A26BCDEF2351A4D900395683 /* MPFilterHandler.m */,
 				A24F615223557583001D3A50 /* MPVideoModel.h */,
 				A24F615323557583001D3A50 /* MPVideoModel.m */,
+				A272DC97235803D400E7DB9A /* MPFilterMaterialModel.h */,
+				A272DC98235803D400E7DB9A /* MPFilterMaterialModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -313,6 +324,10 @@
 				A2A2029E2357231C00EAAC06 /* MPFilterCategoryView.m */,
 				A2A202A02357233C00EAAC06 /* MPFilterMaterialView.h */,
 				A2A202A12357233C00EAAC06 /* MPFilterMaterialView.m */,
+				A2A202A323572AB200EAAC06 /* MPFilterCategoryCell.h */,
+				A2A202A423572AB200EAAC06 /* MPFilterCategoryCell.m */,
+				A2A202A623572AEF00EAAC06 /* MPFilterMaterialViewCell.h */,
+				A2A202A723572AEF00EAAC06 /* MPFilterMaterialViewCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -619,14 +634,17 @@
 				A2536A53235088AF0059E814 /* MPCameraViewController.m in Sources */,
 				A2A2029C23571FCB00EAAC06 /* MPFilterBarView.m in Sources */,
 				A2A202962356E95100EAAC06 /* MPVideoResultViewController.m in Sources */,
+				A272DC99235803D400E7DB9A /* MPFilterMaterialModel.m in Sources */,
 				A26BCDE9235181B600395683 /* UIButton+Extention.m in Sources */,
 				A233DACD2354136C005BB700 /* MPCapturingButton.m in Sources */,
 				A2536A0D23507FE90059E814 /* AppDelegate.m in Sources */,
 				A2A202992356EA1100EAAC06 /* MPAssetHelper.m in Sources */,
 				A24F614E23555D24001D3A50 /* MPCapturingModeSwitchView.m in Sources */,
+				A2A202A523572AB200EAAC06 /* MPFilterCategoryCell.m in Sources */,
 				A26BCDF02351A4D900395683 /* MPFilterHandler.m in Sources */,
 				A26BCDEA235181B600395683 /* UIView+Extention.m in Sources */,
 				A26BCDDA23517D6600395683 /* MPCameraManager.m in Sources */,
+				A2A202A823572AEF00EAAC06 /* MPFilterMaterialViewCell.m in Sources */,
 				A2536A1E23507FE90059E814 /* main.m in Sources */,
 				A26BCDE7235181B600395683 /* UIDevice+Extention.m in Sources */,
 				A233DAD023541756005BB700 /* MPPhotoResultViewController.m in Sources */,

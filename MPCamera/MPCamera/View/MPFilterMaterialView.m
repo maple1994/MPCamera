@@ -7,15 +7,95 @@
 //
 
 #import "MPFilterMaterialView.h"
+#import "MPFilterMaterialViewCell.h"
+
+static NSString * const kCCFilterMaterialViewReuseIdentifier = @"CCFilterMaterialViewReuseIdentifier";
+
+@interface MPFilterMaterialView ()<UICollectionViewDelegate, UICollectionViewDataSource>
+
+@property (nonatomic, strong) UICollectionView *collectionView;
+@property (nonatomic, strong) UICollectionViewFlowLayout *collectionViewLayout;
+@property (nonatomic, assign) NSInteger currentIndex;
+
+@end
 
 @implementation MPFilterMaterialView
 
-/*
-// Only override drawRect: if you perform custom drawing.
-// An empty implementation adversely affects performance during animation.
-- (void)drawRect:(CGRect)rect {
-    // Drawing code
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    [self setup];
+    return self;
 }
-*/
+
+- (void)setup
+{
+    [self createCollectionViewLayout];
+    self.collectionView = ({
+        UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:[self bounds] collectionViewLayout:_collectionViewLayout];
+        collectionView.backgroundColor = [UIColor clearColor];
+        collectionView.delegate = self;
+        collectionView.dataSource = self;
+        collectionView.showsVerticalScrollIndicator = NO;
+        collectionView.showsHorizontalScrollIndicator = NO;
+        [collectionView registerClass:[MPFilterMaterialViewCell class] forCellWithReuseIdentifier:kCCFilterMaterialViewReuseIdentifier];
+        collectionView;
+    });
+    [self addSubview:self.collectionView];
+    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self);
+    }];
+}
+
+- (void)createCollectionViewLayout
+{
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    
+    //设置间距
+    flowLayout.minimumLineSpacing = 15;
+    flowLayout.minimumInteritemSpacing = 0;
+    
+    //设置item尺寸
+    CGFloat itemW = 60;
+    CGFloat itemH = 100;
+    flowLayout.itemSize = CGSizeMake(itemW, itemH);
+    
+    flowLayout.sectionInset = UIEdgeInsetsMake(0, 15, 0, 15);
+    
+    // 设置水平滚动方向
+    flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    
+    _collectionViewLayout = flowLayout;
+}
+
+- (void)selectIndex:(NSIndexPath *)indexPath {
+    MPFilterMaterialViewCell *lastSelectCell = (MPFilterMaterialViewCell *)[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:self.currentIndex inSection:0]];
+    MPFilterMaterialViewCell *currentSelectCell = (MPFilterMaterialViewCell *)[self.collectionView cellForItemAtIndexPath:indexPath];
+    lastSelectCell.isSelect = NO;
+    currentSelectCell.isSelect = YES;
+    
+    self.currentIndex = indexPath.row;
+//    self.selectMaterialModel = self.itemList[self.currentIndex];
+
+    [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+}
+
+// MARK: - UICollectionViewDelegate, UICollectionViewDataSource
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return 10;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    MPFilterMaterialViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:kCCFilterMaterialViewReuseIdentifier forIndexPath:indexPath];
+//    cell.filterMaterialModel = self.itemList[indexPath.row];
+//    cell.isSelect = cell.filterMaterialModel == self.selectMaterialModel;
+    
+    return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self selectIndex:indexPath];
+}
 
 @end

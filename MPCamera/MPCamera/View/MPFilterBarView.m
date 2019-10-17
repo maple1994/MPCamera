@@ -34,9 +34,16 @@ static CGFloat const kFilterMatrialViewHeight = 100.0f;
 {
     self.backgroundColor = RGBA(0, 0, 0, 0.5);
     self.filterMaterialView = [[MPFilterMaterialView alloc] init];
-    self.filterMaterialView.backgroundColor =RGBA(255, 0, 0, 0.4);
-    self.filterCategoryView = [[MPFilterCategoryView alloc] init];
-    self.filterCategoryView.backgroundColor =RGBA(0, 255, 0, 0.4);
+    self.filterCategoryView = ({
+        MPFilterCategoryView *view = [[MPFilterCategoryView alloc] init];
+        view.itemNormalColor = [UIColor whiteColor];
+        view.itemSelectColor = ThemeColor;
+        view.itemList = @[@"内置", @"自定义"];
+        view.itemFont = [UIFont systemFontOfSize:14];
+        view.itemWidth = 65;
+        view.bottomLineWidth = 30;
+        view;
+    });
     self.beautifySwitch = [[UISwitch alloc] init];
     self.beautifySwitch.onTintColor = ThemeColor;
     self.beautifySwitch.transform = CGAffineTransformMakeScale(0.7, 0.7);
