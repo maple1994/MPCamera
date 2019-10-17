@@ -558,6 +558,8 @@ completion:(void (^)(void))completion {
 
 - (void)cameraTopViewDidClickRatioButton: (MPCameraTopView *)cameraTopView
 {
+    if (self.isChangingRatio)
+        return;
     MPCameraRatio ratio = [MPCameraManager shareManager].ratio;
     NSInteger ratioCount = [UIDevice is_iPhoneX_Series] ? 4 : 3;
     MPCameraRatio nextRatio = (ratio + 1) % ratioCount;
